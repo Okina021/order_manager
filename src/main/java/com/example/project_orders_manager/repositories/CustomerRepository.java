@@ -1,6 +1,6 @@
-package com.example.prova_evo.repositories;
+package com.example.project_orders_manager.repositories;
 
-import com.example.prova_evo.models.Customer;
+import com.example.project_orders_manager.models.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {

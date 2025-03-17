@@ -1,11 +1,8 @@
-package com.example.prova_evo.models.dto;
+package com.example.project_orders_manager.models.dto;
 
-import com.example.prova_evo.models.Customer;
-import com.example.prova_evo.models.Order;
-import com.example.prova_evo.models.Product;
-import com.example.prova_evo.models.enums.OrderStatus;
-
-import java.util.List;
+import com.example.project_orders_manager.models.Customer;
+import com.example.project_orders_manager.models.Order;
+import com.example.project_orders_manager.models.enums.OrderStatus;
 
 public record OrderDTO(
         Long id,

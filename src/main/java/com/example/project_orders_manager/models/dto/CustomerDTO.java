@@ -1,7 +1,7 @@
-package com.example.prova_evo.models.dto;
+package com.example.project_orders_manager.models.dto;
 
-import com.example.prova_evo.models.Customer;
-import com.example.prova_evo.models.Order;
+import com.example.project_orders_manager.models.Customer;
+import com.example.project_orders_manager.models.Order;
 
 import java.util.List;
 

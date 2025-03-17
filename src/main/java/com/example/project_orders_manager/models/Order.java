@@ -1,13 +1,10 @@
-package com.example.prova_evo.models;
+package com.example.project_orders_manager.models;
 
-import com.example.prova_evo.models.enums.OrderStatus;
+import com.example.project_orders_manager.models.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "orders")

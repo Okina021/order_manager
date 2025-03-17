@@ -1,8 +1,8 @@
-package com.example.prova_evo.controllers;
+package com.example.project_orders_manager.controllers;
 
-import com.example.prova_evo.models.Customer;
-import com.example.prova_evo.models.dto.CustomerDTO;
-import com.example.prova_evo.services.CustomerService;
+import com.example.project_orders_manager.models.Customer;
+import com.example.project_orders_manager.models.dto.CustomerDTO;
+import com.example.project_orders_manager.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

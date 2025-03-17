@@ -1,9 +1,9 @@
-package com.example.prova_evo.services;
+package com.example.project_orders_manager.services;
 
-import com.example.prova_evo.models.Order;
-import com.example.prova_evo.models.dto.OrderDTO;
-import com.example.prova_evo.models.enums.OrderStatus;
-import com.example.prova_evo.repositories.OrderRepository;
+import com.example.project_orders_manager.models.Order;
+import com.example.project_orders_manager.models.dto.OrderDTO;
+import com.example.project_orders_manager.models.enums.OrderStatus;
+import com.example.project_orders_manager.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

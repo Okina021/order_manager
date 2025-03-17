@@ -1,4 +1,4 @@
-package com.example.prova_evo.models;
+package com.example.project_orders_manager.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;

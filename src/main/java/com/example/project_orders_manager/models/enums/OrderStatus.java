@@ -1,4 +1,4 @@
-package com.example.prova_evo.models.enums;
+package com.example.project_orders_manager.models.enums;
 
 public enum OrderStatus {
     PENDING(0),
