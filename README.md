@@ -38,5 +38,5 @@ Este projeto implementa uma API para gerenciar pedidos (orders) e clientes (cust
 ### Clonando o repositório
 
 ```bash
-git clone https://github.com/usuario/orders-customers-api.git
+git clone git@github.com:Okina021/order_manager.git
 cd orders-customers-api
