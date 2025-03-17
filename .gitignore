@@ -1,0 +1,87 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+# Diretórios do Maven e Gradle
+/target/
+/out/
+/build/
+/.gradle/
+/mvnw
+/mvnw.cmd
+/.mvn/
+
+# Arquivos do IntelliJ IDEA
+/.idea/
+/*.iml
+/*.ipr
+/*.iws
+
+# Arquivos do Eclipse
+/.project
+/.classpath
+/.settings/
+/*.springBeans
+
+# Arquivos do VS Code
+/.vscode/
+
+# Logs e arquivos temporários
+/log/
+/logs/
+/*.log
+/tmp/
+
+# Configurações do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos de ambiente (contêm credenciais sensíveis)
+.env
+*.properties.local
+application-*.yml
+application-*.yaml
+application-*.properties
+
+# Dependências do Node (caso use frontend dentro do projeto)
+node_modules/
+
+# Docker
+/docker/
+/docker-compose.override.yml
+
+# Lombok
+.lombok/
+
+
+
