@@ -20,26 +20,14 @@ public class CustomerService {
         List<Customer> customers = customerRepository.findAll();
         return customers
                 .stream()
-                .map(customer -> new CustomerDTO(
-                customer.getId(),
-                customer.getName(),
-                customer.getSurname(),
-                customer.getDoc(),
-                customer.getOrders()
-                        .stream()
-                        .map(order -> new OrderDTO(
-                                order.getId(),
-                                order.getStatus(),
-                                order.getCustomer().getId()
-                        )).collect(Collectors.toList())
-        )).collect(Collectors.toList());
+                .map(CustomerDTO::fromEntity)
+                .collect(Collectors.toList());
     }
 
     public CustomerDTO getCustomerById(Long id) {
         Optional<Customer> customer = customerRepository.findById(id);
         if (customer.isPresent()){
-            CustomerDTO customerDTO = CustomerDTO.fromEntity(customer.get());
-            return customerDTO;
+            return CustomerDTO.fromEntity(customer.get());
         }else {
             throw new RuntimeException("Customer not found");
         }
@@ -55,11 +43,7 @@ public class CustomerService {
 
     public Customer updateCustomer(Long id, CustomerDTO customer) {
         Optional<CustomerDTO> c = Optional.of(this.getCustomerById(id));
-        if (c.isPresent()) {
-            return this.save(customer);
-        } else {
-            throw new RuntimeException("Id not found");
-        }
+        return this.save(customer);
     }
 
     public void deleteCustomer(Long id) {

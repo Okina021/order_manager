@@ -18,18 +18,16 @@ public class OrderService {
 
     public List<OrderDTO> getAllOrders() {
         List<Order> orders = repository.findAll();
-        List<OrderDTO> orderDTOList = orders.stream()
+        return orders.stream()
                 .map(OrderDTO::fromEntity)
                 .collect(Collectors.toList());
-        return orderDTOList;
     }
 
     public OrderDTO getOrder(Long id) {
         Optional<Order> optionalOrder = repository.findById(id);
 
         if (optionalOrder.isPresent()) {
-            OrderDTO orderDTO = OrderDTO.fromEntity(optionalOrder.get());
-            return orderDTO;
+            return OrderDTO.fromEntity(optionalOrder.get());
         } else {
             throw new RuntimeException("Order not found");
         }
