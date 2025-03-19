@@ -8,9 +8,8 @@ public record OrderDTO(
         Long id,
         OrderStatus status,
         Long customerID
-//        List<Product> items
 ) {
-    public static OrderDTO fromEntity (Order order) {
+    public static OrderDTO fromEntity(Order order) {
         return new OrderDTO(
                 order.getId(),
                 order.getStatus(),
@@ -18,9 +17,17 @@ public record OrderDTO(
         );
     }
 
-    public static Order toEntity(OrderDTO orderDTO){
+    public static Order toEntityWithId(OrderDTO orderDTO) {
         Order order = new Order();
         order.setId(orderDTO.id());
+        order.setStatus(orderDTO.status());
+        Customer customer = new Customer();
+        customer.setId(orderDTO.customerID());
+        return order;
+    }
+
+    public static Order toEntity(OrderDTO orderDTO) {
+        Order order = new Order();
         order.setStatus(orderDTO.status());
         Customer customer = new Customer();
         customer.setId(orderDTO.customerID());

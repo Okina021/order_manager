@@ -24,6 +24,25 @@ public record CustomerDTO(
 
     public static Customer toEntity(CustomerDTO customerDTO) {
         Customer customer = new Customer();
+        customer.setName(customerDTO.name());
+        customer.setSurname(customerDTO.surname());
+        customer.setDoc(customerDTO.doc());
+        if (customerDTO.orders() != null){
+            customer.setOrders(
+                    customerDTO.orders.stream().map(orderDTO -> {
+                        Order order = new Order();
+                        order.setId(orderDTO.id());
+                        order.setStatus(orderDTO.status());
+                        order.setCustomer(customer);
+                        return order;
+                    }).toList()
+            );
+        }
+        return customer;
+    }
+
+    public static Customer toEntityWithId(CustomerDTO customerDTO) {
+        Customer customer = new Customer();
         customer.setId(customerDTO.id());
         customer.setName(customerDTO.name());
         customer.setSurname(customerDTO.surname());
