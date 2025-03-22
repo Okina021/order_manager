@@ -1,9 +1,11 @@
 package com.example.project_orders_manager.services;
 
+import com.example.project_orders_manager.exceptions.BadRequestException;
 import com.example.project_orders_manager.models.Customer;
-import com.example.project_orders_manager.models.dto.CustomerDTO;
-import com.example.project_orders_manager.models.dto.OrderDTO;
+import com.example.project_orders_manager.models.dto.customerDTOs.CustomerDTO;
+import com.example.project_orders_manager.models.dto.customerDTOs.CustomerSummaryDTO;
 import com.example.project_orders_manager.repositories.CustomerRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,42 +18,34 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public List<CustomerDTO> getAllCustomers() {
-        List<Customer> customers = customerRepository.findAll();
-        return customers
+    public List<CustomerSummaryDTO> getAllCustomers() {
+        return customerRepository.findAll()
                 .stream()
-                .map(CustomerDTO::fromEntity)
+                .map(CustomerSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
     }
 
     public CustomerDTO getCustomerById(Long id) {
-        Optional<Customer> customer = customerRepository.findById(id);
-        if (customer.isPresent()){
-            return CustomerDTO.fromEntity(customer.get());
-        }else {
-            throw new RuntimeException("Customer not found");
-        }
+        return customerRepository.findById(id).map(CustomerDTO::fromEntity).orElseThrow(() -> new EntityNotFoundException("Customer not found"));
     }
 
-    public Customer save(CustomerDTO customer) {
-        Customer c = new Customer();
-        c.setName(customer.name());
-        c.setSurname(customer.surname());
-        c.setDoc(customer.doc());
-        return customerRepository.save(c);
+    public CustomerDTO save(CustomerDTO customer) {
+        if (customer.id() != null) throw new BadRequestException("Customer id must be null");
+        return CustomerDTO.fromEntity(customerRepository.save(CustomerDTO.toEntity(customer)));
+
     }
 
-    public Customer updateCustomer(Long id, CustomerDTO customer) {
-        Optional<CustomerDTO> c = Optional.of(this.getCustomerById(id));
-        return this.save(customer);
+    public CustomerDTO updateCustomer(Long id, CustomerDTO customer) {
+        Customer c = customerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        Optional.ofNullable(customer.name()).ifPresent(c::setName);
+        Optional.ofNullable(customer.surname()).ifPresent(c::setSurname);
+        Optional.ofNullable(customer.doc()).ifPresent(c::setDoc);
+        return CustomerDTO.fromEntity(customerRepository.save(CustomerDTO.toEntity(customer)));
+
     }
 
     public void deleteCustomer(Long id) {
-        Optional<Customer> c = customerRepository.findById(id);
-        if (c.isPresent()) {
-            customerRepository.delete(c.get());
-        } else {
-            throw new RuntimeException("Id not found");
-        }
+        if (!customerRepository.existsById(id)) throw new EntityNotFoundException("Customer not found");
+        customerRepository.deleteById(id);
     }
 }

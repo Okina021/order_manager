@@ -1,8 +1,10 @@
 package com.example.project_orders_manager.services;
 
+import com.example.project_orders_manager.exceptions.BadRequestException;
 import com.example.project_orders_manager.models.Product;
-import com.example.project_orders_manager.models.dto.ProductDTO;
+import com.example.project_orders_manager.models.dto.productDTOs.ProductDTO;
 import com.example.project_orders_manager.repositories.ProductRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,41 +19,31 @@ public class ProductService {
     private ProductRepository repository;
 
     public List<ProductDTO> getProducts() {
-        List<Product> products = repository.findAll();
-        return products.stream()
+        return repository.findAll().stream()
                 .map(ProductDTO::fromEntity)
                 .collect(Collectors.toList());
     }
 
     public ProductDTO getProduct(Long id) {
-        Optional<Product> productDTO = repository.findById(id);
-        if (productDTO.isPresent()) return ProductDTO.fromEntity(productDTO.get());
-        throw new RuntimeException("id não encontrado");
+        return repository.findById(id).map((ProductDTO::fromEntity)).orElseThrow(() -> new EntityNotFoundException("Product with id " + id + " not foud"));
     }
 
     public ProductDTO postProduct(ProductDTO productDTO) {
-        Product product = ProductDTO.toEntityWithId(productDTO);
-        return ProductDTO.fromEntity(repository.save(product));
+        if (productDTO.id() != null) throw new BadRequestException("Product id must be null");
+        return ProductDTO.fromEntity(repository.save(ProductDTO.toEntity(productDTO)));
     }
 
     public ProductDTO updateProduct(Long id, ProductDTO product) {
-        Optional<Product> optionalProduct = repository.findById(id);
-
-        if (optionalProduct.isPresent()) {
-            Product updateProduct = optionalProduct.get();
-            if (product.name() != null) updateProduct.setName(product.name());
-            if (product.SKU() != null) updateProduct.setSKU(product.SKU());
-            if (product.quantity() != null) updateProduct.setQuantity(product.quantity());
-            if (product.price() != null) updateProduct.setPrice(product.price());
-            return ProductDTO.fromEntity(repository.save(updateProduct));
-        }
-        throw new RuntimeException("produto não encontrado");
+        Product p = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Product with id " + id + " not found"));
+        Optional.ofNullable(product.SKU()).ifPresent(p::setSKU);
+        Optional.ofNullable(product.price()).ifPresent(p::setPrice);
+        Optional.ofNullable(product.name()).ifPresent(p::setName);
+        Optional.ofNullable(product.quantity()).ifPresent(p::setQuantity);
+        return ProductDTO.fromEntity(repository.save(p));
     }
 
     public void deleteProduct(Long id) {
         Optional<Product> product = repository.findById(id);
-        if (product.isPresent())
-            repository.delete(product.get());
-
+        product.ifPresent(value -> repository.delete(value));
     }
 }

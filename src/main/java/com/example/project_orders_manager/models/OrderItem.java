@@ -1,23 +1,29 @@
 package com.example.project_orders_manager.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "order_items")
 @Data
-public class OrderItems {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
@@ -25,17 +31,18 @@ public class OrderItems {
     private Integer quantity;
 
 
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal unitPrice;
+    @Column(name = "unit_price", nullable = false, precision = 10, scale = 2)
+    private BigDecimal price;
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal totalPrice;
 
     @PrePersist
     @PreUpdate
-    private void updateTotalPrice(){
-        if (unitPrice != null && quantity != null){
-            this.totalPrice = unitPrice.multiply(BigDecimal.valueOf(quantity));
+    private void calculateTotalPrice() {
+        if (price != null && quantity != null) {
+            this.totalPrice = price.multiply(BigDecimal.valueOf(quantity));
         }
     }
+
 }

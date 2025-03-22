@@ -1,4 +1,4 @@
-package com.example.project_orders_manager.models.dto;
+package com.example.project_orders_manager.models.dto.productDTOs;
 
 import com.example.project_orders_manager.models.Product;
 

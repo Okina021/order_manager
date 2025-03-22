@@ -1,7 +1,8 @@
-package com.example.project_orders_manager.models.dto;
+package com.example.project_orders_manager.models.dto.customerDTOs;
 
 import com.example.project_orders_manager.models.Customer;
 import com.example.project_orders_manager.models.Order;
+import com.example.project_orders_manager.models.dto.orderDTOs.OrderSummaryDTO;
 
 import java.util.List;
 
@@ -10,7 +11,8 @@ public record CustomerDTO(
         String name,
         String surname,
         String doc,
-        List<OrderDTO> orders) {
+        String email,
+        List<OrderSummaryDTO> orders) {
 
     public static CustomerDTO fromEntity(Customer customer) {
         return new CustomerDTO(
@@ -18,7 +20,8 @@ public record CustomerDTO(
                 customer.getName(),
                 customer.getSurname(),
                 customer.getDoc(),
-                customer.getOrders().stream().map(OrderDTO::fromEntity).toList()
+                customer.getEmail(),
+                customer.getOrders().stream().map(OrderSummaryDTO::fromEntity).toList()
         );
     }
 
@@ -27,7 +30,8 @@ public record CustomerDTO(
         customer.setName(customerDTO.name());
         customer.setSurname(customerDTO.surname());
         customer.setDoc(customerDTO.doc());
-        if (customerDTO.orders() != null){
+        customer.setEmail(customerDTO.email());
+        if (customerDTO.orders() != null) {
             customer.setOrders(
                     customerDTO.orders.stream().map(orderDTO -> {
                         Order order = new Order();
@@ -47,7 +51,8 @@ public record CustomerDTO(
         customer.setName(customerDTO.name());
         customer.setSurname(customerDTO.surname());
         customer.setDoc(customerDTO.doc());
-        if (customerDTO.orders() != null){
+        customer.setEmail(customerDTO.email());
+        if (customerDTO.orders() != null) {
             customer.setOrders(
                     customerDTO.orders.stream().map(orderDTO -> {
                         Order order = new Order();

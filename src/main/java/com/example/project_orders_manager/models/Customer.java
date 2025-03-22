@@ -23,8 +23,11 @@ public class Customer {
     private String name;
     @Column(nullable = false)
     private String surname;
-    @Column(length = 11, unique = true)
+    @Column(length = 11, unique = true, nullable = false)
     private String doc;
+    @Column(unique = true, nullable = false)
+    private String email;
+
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 }
