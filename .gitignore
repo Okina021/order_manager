@@ -72,7 +72,6 @@ Thumbs.db
 application-*.yml
 application-*.yaml
 application-*.properties
-application.properties
 
 # Dependências do Node (caso use frontend dentro do projeto)
 node_modules/
