@@ -1,9 +1,9 @@
-package com.example.project_orders_manager.models.dto.orderDTOs;
+package com.example.project_orders_manager.domain.dto.orderDTOs;
 
-import com.example.project_orders_manager.models.Customer;
-import com.example.project_orders_manager.models.Order;
-import com.example.project_orders_manager.models.dto.orderItemDTOs.OrderItemSummaryDTO;
-import com.example.project_orders_manager.models.enums.OrderStatus;
+import com.example.project_orders_manager.domain.Customer;
+import com.example.project_orders_manager.domain.Order;
+import com.example.project_orders_manager.domain.dto.orderItemDTOs.OrderItemSummaryDTO;
+import com.example.project_orders_manager.domain.enums.OrderStatus;
 
 import java.util.List;
 

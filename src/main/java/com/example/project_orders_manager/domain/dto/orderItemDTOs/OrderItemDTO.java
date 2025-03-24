@@ -1,8 +1,8 @@
-package com.example.project_orders_manager.models.dto.orderItemDTOs;
+package com.example.project_orders_manager.domain.dto.orderItemDTOs;
 
-import com.example.project_orders_manager.models.Order;
-import com.example.project_orders_manager.models.OrderItem;
-import com.example.project_orders_manager.models.Product;
+import com.example.project_orders_manager.domain.Order;
+import com.example.project_orders_manager.domain.OrderItem;
+import com.example.project_orders_manager.domain.Product;
 
 import java.math.BigDecimal;
 

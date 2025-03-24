@@ -1,4 +1,4 @@
-package com.example.project_orders_manager.models.enums;
+package com.example.project_orders_manager.domain.enums;
 
 public enum OrderStatus {
     PENDING(0),

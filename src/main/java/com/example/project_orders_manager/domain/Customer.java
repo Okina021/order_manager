@@ -1,4 +1,4 @@
-package com.example.project_orders_manager.models;
+package com.example.project_orders_manager.domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;

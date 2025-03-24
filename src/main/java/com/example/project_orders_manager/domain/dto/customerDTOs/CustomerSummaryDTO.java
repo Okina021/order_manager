@@ -1,6 +1,6 @@
-package com.example.project_orders_manager.models.dto.customerDTOs;
+package com.example.project_orders_manager.domain.dto.customerDTOs;
 
-import com.example.project_orders_manager.models.Customer;
+import com.example.project_orders_manager.domain.Customer;
 
 public record CustomerSummaryDTO(
         Long id,

@@ -1,4 +1,4 @@
-package com.example.project_orders_manager.models;
+package com.example.project_orders_manager.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
