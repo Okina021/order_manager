@@ -1,9 +1,9 @@
 package com.example.project_orders_manager.services;
 
 import com.example.project_orders_manager.exceptions.BadRequestException;
-import com.example.project_orders_manager.models.Customer;
-import com.example.project_orders_manager.models.dto.customerDTOs.CustomerDTO;
-import com.example.project_orders_manager.models.dto.customerDTOs.CustomerSummaryDTO;
+import com.example.project_orders_manager.domain.Customer;
+import com.example.project_orders_manager.domain.dto.customerDTOs.CustomerDTO;
+import com.example.project_orders_manager.domain.dto.customerDTOs.CustomerSummaryDTO;
 import com.example.project_orders_manager.repositories.CustomerRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

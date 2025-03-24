@@ -1,8 +1,8 @@
 package com.example.project_orders_manager.services;
 
 import com.example.project_orders_manager.exceptions.BadRequestException;
-import com.example.project_orders_manager.models.OrderItem;
-import com.example.project_orders_manager.models.dto.orderItemDTOs.OrderItemDTO;
+import com.example.project_orders_manager.domain.OrderItem;
+import com.example.project_orders_manager.domain.dto.orderItemDTOs.OrderItemDTO;
 import com.example.project_orders_manager.repositories.OrderItemRepository;
 import com.example.project_orders_manager.repositories.OrderRepository;
 import com.example.project_orders_manager.repositories.ProductRepository;

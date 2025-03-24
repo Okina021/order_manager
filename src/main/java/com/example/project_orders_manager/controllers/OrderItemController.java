@@ -1,6 +1,6 @@
 package com.example.project_orders_manager.controllers;
 
-import com.example.project_orders_manager.models.dto.orderItemDTOs.OrderItemDTO;
+import com.example.project_orders_manager.domain.dto.orderItemDTOs.OrderItemDTO;
 import com.example.project_orders_manager.services.OrderItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
