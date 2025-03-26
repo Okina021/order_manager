@@ -2,8 +2,10 @@ package com.example.project_orders_manager.controllers;
 
 import com.example.project_orders_manager.domain.User;
 import com.example.project_orders_manager.domain.dto.userDTOs.AuthenticationDTO;
+import com.example.project_orders_manager.domain.dto.userDTOs.LoginResponseDTO;
 import com.example.project_orders_manager.domain.dto.userDTOs.RegisterDTO;
 import com.example.project_orders_manager.repositories.UserRepository;
+import com.example.project_orders_manager.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +24,15 @@ public class AuthenticationController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private UserRepository repository;
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody @Valid AuthenticationDTO data) {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
-        return ResponseEntity.ok().build();
+        var token = tokenService.generateToken((User)auth.getPrincipal());
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @PostMapping("/register")
