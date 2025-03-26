@@ -1,5 +1,6 @@
 package com.example.project_orders_manager.domain;
 
+import com.example.project_orders_manager.exceptions.BadRequestException;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
@@ -24,7 +25,14 @@ public class Product {
     @Column(precision = 10, scale = 2)
     private BigDecimal price = BigDecimal.valueOf(0.00);
 
+    public void reduceStock(Integer quantity){
+        if (this.quantity< quantity) throw new BadRequestException("Insufficient stock for the product: SKU " + this.SKU);
+        this.quantity -= quantity;
+    }
+
+    public void incrementStock(Integer quantity){
+        if (quantity < 0) throw new BadRequestException("Cannot increment stock with a negative value: SKU " + this.SKU);
+        this.quantity += quantity;
+    }
+
 }
-//    public void updateQuantity(Integer quantity){
-//        this.setQuantity(quantity);
-//    }

@@ -40,8 +40,9 @@ public class OrderController {
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<OrderDTO> changeStatus(@PathVariable Long id, @RequestParam Integer status) {
+    public ResponseEntity<OrderDTO> changeStatus(@PathVariable Long id, @RequestParam String status) {
         return ResponseEntity.ok(service.changeOrderStatus(id, status));
     }
+
 
 }

@@ -1,11 +1,17 @@
 package com.example.project_orders_manager.services;
 
-import com.example.project_orders_manager.exceptions.BadRequestException;
 import com.example.project_orders_manager.domain.Order;
+import com.example.project_orders_manager.domain.OrderItem;
+import com.example.project_orders_manager.domain.Product;
+import com.example.project_orders_manager.domain.dto.orderDTOs.NewOrderDTO;
 import com.example.project_orders_manager.domain.dto.orderDTOs.OrderDTO;
 import com.example.project_orders_manager.domain.dto.orderDTOs.OrderSummaryDTO;
 import com.example.project_orders_manager.domain.enums.OrderStatus;
+import com.example.project_orders_manager.exceptions.BadRequestException;
+import com.example.project_orders_manager.repositories.CustomerRepository;
+import com.example.project_orders_manager.repositories.OrderItemRepository;
 import com.example.project_orders_manager.repositories.OrderRepository;
+import com.example.project_orders_manager.repositories.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +23,12 @@ import java.util.stream.Collectors;
 public class OrderService {
     @Autowired
     private OrderRepository repository;
+    @Autowired
+    private OrderItemRepository itemRepository;
+    @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private CustomerRepository customerRepository;
 
     public List<OrderSummaryDTO> getAllOrders() {
         return repository.findAll().stream().map(OrderSummaryDTO::fromEntity).collect(Collectors.toList());
@@ -28,8 +40,10 @@ public class OrderService {
 
     public OrderDTO postOrder(OrderDTO order) {
         if (order.id() != null) throw new BadRequestException("New order cannot have an ID.");
-
-        return OrderDTO.fromEntity(repository.save(OrderDTO.toEntity(order)));
+        Order o = new Order();
+        o.setCustomer(customerRepository.findById(order.customer_id()).orElseThrow(() -> new EntityNotFoundException("Customer not found")));
+        if (order.status() != null) o.setStatus(OrderStatus.PENDING);
+        return OrderDTO.fromEntity(repository.save(o));
     }
 
     public void deleteOrder(Long id) {
@@ -37,10 +51,23 @@ public class OrderService {
         repository.deleteById(id);
     }
 
-    public OrderDTO changeOrderStatus(Long id, Integer status) {
-        Order order = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Order id \" + id + \" not found"));
-        order.setStatus(OrderStatus.fromCode(status));
+    public OrderDTO changeOrderStatus(Long id, String status) {
+        Order order = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Order id " + id + " not found"));
+        order.setStatus(OrderStatus.valueOf(status));
+        if (order.getStatus() == OrderStatus.CANCELED) {
+            for (OrderItem item : order.getItems()) {
+                Product product = productRepository.findById(item.getProduct().getId()).orElseThrow(() -> new EntityNotFoundException("Product not found"));
+                product.incrementStock(item.getQuantity());
+                productRepository.save(product);
+            }
+        }
         return OrderDTO.fromEntity(repository.save(order));
     }
+
+//    public OrderDTO createOrder(NewOrderDTO newOrderDTO) {
+//        Order newOrder = new Order();
+//        newOrder.setCustomer(customerRepository.findById(newOrderDTO.customer_id()).orElseThrow(()-> new BadRequestException("Customer not found")));
+//
+//    }
 
 }

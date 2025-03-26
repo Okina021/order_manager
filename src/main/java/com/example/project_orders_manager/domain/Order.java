@@ -19,9 +19,9 @@ public class Order {
     private Long id;
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
-    private OrderStatus status = OrderStatus.fromCode(0);
+    private OrderStatus status = OrderStatus.PENDING;
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items;

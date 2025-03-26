@@ -5,6 +5,7 @@ import com.example.project_orders_manager.domain.Order;
 import com.example.project_orders_manager.domain.dto.orderItemDTOs.OrderItemSummaryDTO;
 import com.example.project_orders_manager.domain.enums.OrderStatus;
 
+import java.util.Collections;
 import java.util.List;
 
 public record OrderDTO(
@@ -18,7 +19,7 @@ public record OrderDTO(
                 order.getId(),
                 order.getStatus(),
                 order.getCustomer().getId(),
-                order.getItems().stream().map(OrderItemSummaryDTO::fromEntity).toList()
+                order.getItems() != null ? order.getItems().stream().map(OrderItemSummaryDTO::fromEntity).toList() : Collections.emptyList()
         );
     }
 
