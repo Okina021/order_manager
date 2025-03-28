@@ -5,9 +5,10 @@ import com.example.project_orders_manager.domain.Order;
 import com.example.project_orders_manager.domain.dto.orderDTOs.OrderSummaryDTO;
 
 import java.util.List;
+import java.util.UUID;
 
 public record CustomerDTO(
-        Long id,
+        UUID id,
         String name,
         String surname,
         String doc,
@@ -27,10 +28,10 @@ public record CustomerDTO(
 
     public static Customer toEntity(CustomerDTO customerDTO) {
         Customer customer = new Customer();
-        customer.setName(customerDTO.name());
-        customer.setSurname(customerDTO.surname());
-        customer.setDoc(customerDTO.doc());
-        customer.setEmail(customerDTO.email());
+        customer.setName(customerDTO.name().toUpperCase());
+        customer.setSurname(customerDTO.surname().toUpperCase());
+        customer.setDoc(String.valueOf(customerDTO.doc()));
+        customer.setEmail(customerDTO.email().toLowerCase());
         if (customerDTO.orders() != null) {
             customer.setOrders(
                     customerDTO.orders.stream().map(orderDTO -> {

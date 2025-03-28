@@ -3,7 +3,6 @@ package com.example.project_orders_manager.services;
 import com.example.project_orders_manager.domain.Order;
 import com.example.project_orders_manager.domain.OrderItem;
 import com.example.project_orders_manager.domain.Product;
-import com.example.project_orders_manager.domain.dto.orderDTOs.NewOrderDTO;
 import com.example.project_orders_manager.domain.dto.orderDTOs.OrderDTO;
 import com.example.project_orders_manager.domain.dto.orderDTOs.OrderSummaryDTO;
 import com.example.project_orders_manager.domain.enums.OrderStatus;
@@ -14,10 +13,11 @@ import com.example.project_orders_manager.repositories.OrderRepository;
 import com.example.project_orders_manager.repositories.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 @Service
 public class OrderService {
@@ -30,11 +30,11 @@ public class OrderService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public List<OrderSummaryDTO> getAllOrders() {
-        return repository.findAll().stream().map(OrderSummaryDTO::fromEntity).collect(Collectors.toList());
+    public Page<OrderSummaryDTO> getAllOrders(Pageable pageable) {
+        return repository.findAll(pageable).map(OrderSummaryDTO::fromEntity);
     }
 
-    public OrderDTO getOrder(Long id) {
+    public OrderDTO getOrder(UUID id) {
         return repository.findById(id).map(OrderDTO::fromEntity).orElseThrow(() -> new EntityNotFoundException("Order id " + id + " not found"));
     }
 
@@ -46,14 +46,14 @@ public class OrderService {
         return OrderDTO.fromEntity(repository.save(o));
     }
 
-    public void deleteOrder(Long id) {
+    public void deleteOrder(UUID id) {
         Order order = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Order id " + id + " not found"));
         repository.deleteById(id);
     }
 
-    public OrderDTO changeOrderStatus(Long id, String status) {
+    public OrderDTO changeOrderStatus(UUID id, Integer status) {
         Order order = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Order id " + id + " not found"));
-        order.setStatus(OrderStatus.valueOf(status));
+        order.setStatus(OrderStatus.fromCode(status));
         if (order.getStatus() == OrderStatus.CANCELED) {
             for (OrderItem item : order.getItems()) {
                 Product product = productRepository.findById(item.getProduct().getId()).orElseThrow(() -> new EntityNotFoundException("Product not found"));

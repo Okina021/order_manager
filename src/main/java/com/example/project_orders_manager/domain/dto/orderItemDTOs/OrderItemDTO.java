@@ -5,12 +5,13 @@ import com.example.project_orders_manager.domain.OrderItem;
 import com.example.project_orders_manager.domain.Product;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public record OrderItemDTO(
-        Long id,
-        Long order_id,
-        Long product_id,
-        Integer quantity,
+        UUID id,
+        UUID order_id,
+        UUID product_id,
+        Integer qty,
         BigDecimal price,
         BigDecimal total_price
 ) {
@@ -33,7 +34,7 @@ public record OrderItemDTO(
         order.setId(dto.order_id());
         Product product = new Product();
         product.setId(dto.product_id());
-        orderItem.setQuantity(dto.quantity());
+        orderItem.setQuantity(dto.qty());
         orderItem.setPrice(dto.price());
         orderItem.setTotalPrice(dto.total_price());
         return orderItem;
@@ -45,7 +46,7 @@ public record OrderItemDTO(
         order.setId(dto.order_id());
         Product product = new Product();
         product.setId(dto.product_id());
-        orderItem.setQuantity(dto.quantity());
+        orderItem.setQuantity(dto.qty());
         orderItem.setPrice(dto.price());
         orderItem.setTotalPrice(dto.total_price());
         return orderItem;

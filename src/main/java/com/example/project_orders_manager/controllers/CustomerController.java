@@ -6,11 +6,13 @@ import com.example.project_orders_manager.services.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/customers")
@@ -22,18 +24,18 @@ public class CustomerController {
 
     @Operation(summary = "Listar todos os cliente", description = "Retorna uma lista com todos os clientes cadastrados")
     @GetMapping()
-    public ResponseEntity<List<CustomerSummaryDTO>> getCustomers() {
-        return ResponseEntity.ok(service.getAllCustomers());
+    public ResponseEntity<Page<CustomerSummaryDTO>> getCustomers(Pageable pageable) {
+        return ResponseEntity.ok(service.getAllCustomers(pageable));
     }
     @Operation(summary = "Retorna Cliente pelo Id", description = "Retorna o cliente cadastrado peo id especificado")
     @GetMapping("/{id}")
-    public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable long id) {
+    public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable UUID id) {
         return ResponseEntity.ok(service.getCustomerById(id));
     }
 
     @Operation(summary = "Atualiza cliente pelo id informado", description = "Atualiza cliente pelo id informado")
     @PutMapping("/{id}")
-    public ResponseEntity<CustomerDTO> putCustomer( @PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
+    public ResponseEntity<CustomerDTO> putCustomer( @PathVariable UUID id, @RequestBody CustomerDTO customerDTO) {
         return ResponseEntity.ok(service.updateCustomer(id, customerDTO));
     }
 
@@ -45,7 +47,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCustomer(@PathVariable UUID id) {
         service.deleteCustomer(id);
         return ResponseEntity.noContent().build();
     }

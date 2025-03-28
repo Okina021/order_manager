@@ -2,8 +2,10 @@ package com.example.project_orders_manager.domain.dto.customerDTOs;
 
 import com.example.project_orders_manager.domain.Customer;
 
+import java.util.UUID;
+
 public record CustomerSummaryDTO(
-        Long id,
+        UUID id,
         String name,
         String surname,
         String doc,

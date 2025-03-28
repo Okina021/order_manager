@@ -4,11 +4,13 @@ import com.example.project_orders_manager.domain.dto.orderDTOs.OrderDTO;
 import com.example.project_orders_manager.domain.dto.orderDTOs.OrderSummaryDTO;
 import com.example.project_orders_manager.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/orders")
@@ -17,12 +19,12 @@ public class OrderController {
     private OrderService service;
 
     @GetMapping
-    public ResponseEntity<List<OrderSummaryDTO>> getOrders() {
-        return ResponseEntity.ok(service.getAllOrders());
+    public ResponseEntity<Page<OrderSummaryDTO>> getOrders(Pageable pageable) {
+        return ResponseEntity.ok(service.getAllOrders(pageable));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long id) {
+    public ResponseEntity<OrderDTO> getOrderById(@PathVariable UUID id) {
         return ResponseEntity.ok(service.getOrder(id));
     }
 
@@ -34,13 +36,13 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteOrder(@PathVariable UUID id) {
         service.deleteOrder(id);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<OrderDTO> changeStatus(@PathVariable Long id, @RequestParam String status) {
+    public ResponseEntity<OrderDTO> changeStatus(@PathVariable UUID id, @RequestParam Integer status) {
         return ResponseEntity.ok(service.changeOrderStatus(id, status));
     }
 

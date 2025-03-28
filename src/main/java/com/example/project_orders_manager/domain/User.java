@@ -2,28 +2,38 @@ package com.example.project_orders_manager.domain;
 
 import com.example.project_orders_manager.domain.enums.UserRole;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 @Table(name = "users")
 @Entity(name = "users")
 @EqualsAndHashCode(of = "id")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-@Data
-public class User implements UserDetails {
+public class User implements UserDetails, Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
+    @Column(nullable = false)
     private String login;
+    @Column(nullable = false)
     private String password;
+    @Column(nullable = false)
+    private Boolean active = true;
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
@@ -31,6 +41,13 @@ public class User implements UserDetails {
                 this.login = login;
                 this.password = password;
                 this.role = role;
+                this.active = true;
+    }
+
+    public User(String login, String password ){
+        this.login = login;
+        this.password = password;
+        this.active = true;
     }
 
     @Override
