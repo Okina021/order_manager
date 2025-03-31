@@ -1,7 +1,7 @@
 package com.example.project_orders_manager.services;
 
-import com.example.project_orders_manager.domain.OrderItem;
-import com.example.project_orders_manager.domain.Product;
+import com.example.project_orders_manager.domain.entities.OrderItem;
+import com.example.project_orders_manager.domain.entities.Product;
 import com.example.project_orders_manager.domain.dto.orderItemDTOs.OrderItemDTO;
 import com.example.project_orders_manager.domain.dto.orderItemDTOs.OrderItemSummaryDTO;
 import com.example.project_orders_manager.exceptions.BadRequestException;
@@ -62,4 +62,44 @@ public class OrderItemService {
 
         return OrderItemDTO.fromEntity(orderItem);
     }
+
+    @Transactional
+    public OrderItemDTO update(UUID id, OrderItemDTO orderItemDTO) {
+        OrderItem orderItem = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Order item not found"));
+
+        Product oldProduct = orderItem.getProduct();
+        oldProduct.incrementStock(orderItem.getQuantity());
+
+        Product newProduct = productRepository.findById(orderItemDTO.product_id())
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+
+        orderRepository.findById(orderItemDTO.order_id())
+                .orElseThrow(() -> new EntityNotFoundException("Order not found"));
+
+        newProduct.reduceStock(orderItemDTO.qty());
+
+        orderItem.setProduct(newProduct);
+        orderItem.setQuantity(orderItemDTO.qty());
+        orderItem.setPrice(newProduct.getPrice());
+
+        repository.save(orderItem);
+        productRepository.save(oldProduct);
+        productRepository.save(newProduct);
+
+        return OrderItemDTO.fromEntity(orderItem);
+    }
+
+    @Transactional
+    public void delete(UUID id) {
+        OrderItem orderItem = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Order item not found"));
+
+        Product product = orderItem.getProduct();
+        product.incrementStock(orderItem.getQuantity());
+
+        repository.delete(orderItem);
+        productRepository.save(product);
+    }
 }
+

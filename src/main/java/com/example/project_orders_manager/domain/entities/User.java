@@ -1,4 +1,4 @@
-package com.example.project_orders_manager.domain;
+package com.example.project_orders_manager.domain.entities;
 
 import com.example.project_orders_manager.domain.enums.UserRole;
 import jakarta.persistence.*;

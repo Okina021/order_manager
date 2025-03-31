@@ -1,4 +1,4 @@
-package com.example.project_orders_manager.domain;
+package com.example.project_orders_manager.domain.entities;
 
 import com.example.project_orders_manager.domain.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -33,4 +33,6 @@ public class Order implements Serializable {
     private Instant createdAt = Instant.now();
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items;
+
+
 }

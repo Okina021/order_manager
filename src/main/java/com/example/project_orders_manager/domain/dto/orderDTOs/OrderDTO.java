@@ -1,7 +1,7 @@
 package com.example.project_orders_manager.domain.dto.orderDTOs;
 
-import com.example.project_orders_manager.domain.Customer;
-import com.example.project_orders_manager.domain.Order;
+import com.example.project_orders_manager.domain.entities.Customer;
+import com.example.project_orders_manager.domain.entities.Order;
 import com.example.project_orders_manager.domain.dto.orderItemDTOs.OrderItemSummaryDTO;
 import com.example.project_orders_manager.domain.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;

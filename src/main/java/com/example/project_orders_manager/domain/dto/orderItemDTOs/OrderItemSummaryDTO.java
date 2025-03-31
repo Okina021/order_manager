@@ -1,6 +1,6 @@
 package com.example.project_orders_manager.domain.dto.orderItemDTOs;
 
-import com.example.project_orders_manager.domain.OrderItem;
+import com.example.project_orders_manager.domain.entities.OrderItem;
 
 import java.math.BigDecimal;
 import java.util.UUID;

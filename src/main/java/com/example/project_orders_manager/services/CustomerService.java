@@ -1,6 +1,6 @@
 package com.example.project_orders_manager.services;
 
-import com.example.project_orders_manager.domain.Customer;
+import com.example.project_orders_manager.domain.entities.Customer;
 import com.example.project_orders_manager.domain.dto.customerDTOs.CustomerDTO;
 import com.example.project_orders_manager.domain.dto.customerDTOs.CustomerSummaryDTO;
 import com.example.project_orders_manager.exceptions.BadRequestException;
@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -28,12 +29,14 @@ public class CustomerService {
         return customerRepository.findById(id).map(CustomerDTO::fromEntity).orElseThrow(() -> new EntityNotFoundException("Customer not found"));
     }
 
+    @Transactional
     public CustomerDTO save(CustomerDTO customer) {
         if (customer.id() != null) throw new BadRequestException("Customer id must be null");
         return CustomerDTO.fromEntity(customerRepository.save(CustomerDTO.toEntity(customer)));
 
     }
 
+    @Transactional
     public CustomerDTO updateCustomer(UUID id, CustomerDTO customer) {
         Customer c = customerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         Optional.ofNullable(customer.name()).ifPresent(c::setName);

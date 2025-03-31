@@ -1,7 +1,7 @@
 package com.example.project_orders_manager.domain.dto.customerDTOs;
 
-import com.example.project_orders_manager.domain.Customer;
-import com.example.project_orders_manager.domain.Order;
+import com.example.project_orders_manager.domain.entities.Customer;
+import com.example.project_orders_manager.domain.entities.Order;
 import com.example.project_orders_manager.domain.dto.orderDTOs.OrderSummaryDTO;
 
 import java.util.List;

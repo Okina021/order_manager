@@ -1,8 +1,8 @@
 package com.example.project_orders_manager.domain.dto.orderItemDTOs;
 
-import com.example.project_orders_manager.domain.Order;
-import com.example.project_orders_manager.domain.OrderItem;
-import com.example.project_orders_manager.domain.Product;
+import com.example.project_orders_manager.domain.entities.Order;
+import com.example.project_orders_manager.domain.entities.OrderItem;
+import com.example.project_orders_manager.domain.entities.Product;
 
 import java.math.BigDecimal;
 import java.util.UUID;

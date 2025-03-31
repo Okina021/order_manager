@@ -1,6 +1,6 @@
 package com.example.project_orders_manager.domain.dto.customerDTOs;
 
-import com.example.project_orders_manager.domain.Customer;
+import com.example.project_orders_manager.domain.entities.Customer;
 
 import java.util.UUID;
 

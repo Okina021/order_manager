@@ -1,4 +1,4 @@
-package com.example.project_orders_manager.domain;
+package com.example.project_orders_manager.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

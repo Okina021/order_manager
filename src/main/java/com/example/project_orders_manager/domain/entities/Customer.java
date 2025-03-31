@@ -1,4 +1,4 @@
-package com.example.project_orders_manager.domain;
+package com.example.project_orders_manager.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -35,4 +35,16 @@ public class Customer implements Serializable {
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
+
+    public void setName(String name) {
+        this.name = name.toUpperCase();
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname.toUpperCase();
+    }
+
+    public void setEmail(String email) {
+        this.email = email.toLowerCase();
+    }
 }

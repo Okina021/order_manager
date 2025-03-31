@@ -22,23 +22,25 @@ public class CustomerController {
     @Autowired
     private CustomerService service;
 
-    @Operation(summary = "Listar todos os cliente", description = "Retorna uma lista com todos os clientes cadastrados")
-    @GetMapping()
+    @Operation(summary = "Listar todos os clientes", description = "Retorna uma lista paginada com todos os clientes cadastrados")
+    @GetMapping
     public ResponseEntity<Page<CustomerSummaryDTO>> getCustomers(Pageable pageable) {
         return ResponseEntity.ok(service.getAllCustomers(pageable));
     }
-    @Operation(summary = "Retorna Cliente pelo Id", description = "Retorna o cliente cadastrado peo id especificado")
+
+    @Operation(summary = "Buscar cliente por ID", description = "Retorna os detalhes de um cliente cadastrado pelo ID informado")
     @GetMapping("/{id}")
     public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable UUID id) {
         return ResponseEntity.ok(service.getCustomerById(id));
     }
 
-    @Operation(summary = "Atualiza cliente pelo id informado", description = "Atualiza cliente pelo id informado")
+    @Operation(summary = "Atualizar cliente", description = "Atualiza os dados de um cliente com base no ID informado")
     @PutMapping("/{id}")
-    public ResponseEntity<CustomerDTO> putCustomer( @PathVariable UUID id, @RequestBody CustomerDTO customerDTO) {
+    public ResponseEntity<CustomerDTO> putCustomer(@PathVariable UUID id, @RequestBody CustomerDTO customerDTO) {
         return ResponseEntity.ok(service.updateCustomer(id, customerDTO));
     }
 
+    @Operation(summary = "Cadastrar novo cliente", description = "Cria um novo cliente e retorna os dados cadastrados")
     @PostMapping
     public ResponseEntity<CustomerDTO> postCustomer(@RequestBody CustomerDTO customerDTO) {
         CustomerDTO customerSave = service.save(customerDTO);
@@ -46,6 +48,7 @@ public class CustomerController {
         return ResponseEntity.created(location).body(customerSave);
     }
 
+    @Operation(summary = "Excluir cliente", description = "Remove um cliente cadastrado com base no ID informado")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable UUID id) {
         service.deleteCustomer(id);

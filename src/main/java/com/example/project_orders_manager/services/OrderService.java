@@ -1,8 +1,8 @@
 package com.example.project_orders_manager.services;
 
-import com.example.project_orders_manager.domain.Order;
-import com.example.project_orders_manager.domain.OrderItem;
-import com.example.project_orders_manager.domain.Product;
+import com.example.project_orders_manager.domain.entities.Order;
+import com.example.project_orders_manager.domain.entities.OrderItem;
+import com.example.project_orders_manager.domain.entities.Product;
 import com.example.project_orders_manager.domain.dto.orderDTOs.OrderDTO;
 import com.example.project_orders_manager.domain.dto.orderDTOs.OrderSummaryDTO;
 import com.example.project_orders_manager.domain.enums.OrderStatus;
@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -38,6 +39,7 @@ public class OrderService {
         return repository.findById(id).map(OrderDTO::fromEntity).orElseThrow(() -> new EntityNotFoundException("Order id " + id + " not found"));
     }
 
+    @Transactional
     public OrderDTO postOrder(OrderDTO order) {
         if (order.id() != null) throw new BadRequestException("New order cannot have an ID.");
         Order o = new Order();
@@ -51,6 +53,7 @@ public class OrderService {
         repository.deleteById(id);
     }
 
+    @Transactional
     public OrderDTO changeOrderStatus(UUID id, Integer status) {
         Order order = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Order id " + id + " not found"));
         order.setStatus(OrderStatus.fromCode(status));
@@ -64,10 +67,5 @@ public class OrderService {
         return OrderDTO.fromEntity(repository.save(order));
     }
 
-//    public OrderDTO createOrder(NewOrderDTO newOrderDTO) {
-//        Order newOrder = new Order();
-//        newOrder.setCustomer(customerRepository.findById(newOrderDTO.customer_id()).orElseThrow(()-> new BadRequestException("Customer not found")));
-//
-//    }
 
 }

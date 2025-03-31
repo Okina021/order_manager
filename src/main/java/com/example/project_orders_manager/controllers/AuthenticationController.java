@@ -1,11 +1,12 @@
 package com.example.project_orders_manager.controllers;
 
-import com.example.project_orders_manager.domain.User;
+import com.example.project_orders_manager.domain.entities.User;
 import com.example.project_orders_manager.domain.dto.userDTOs.AuthenticationDTO;
 import com.example.project_orders_manager.domain.dto.userDTOs.LoginResponseDTO;
 import com.example.project_orders_manager.domain.dto.userDTOs.RegisterDTO;
 import com.example.project_orders_manager.repositories.UserRepository;
 import com.example.project_orders_manager.security.TokenService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ public class AuthenticationController {
     @Autowired
     private TokenService tokenService;
 
+    @Operation(summary = "Login", description = "Efetua o login do usuario na API")
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
@@ -35,6 +37,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
+    @Operation(summary = "Registro", description = "Efetua registro de novos usuarios na API, para efetuar o registro é necessario ter a role de 'admin'")
     @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestBody @Valid RegisterDTO data) {
         if (this.repository.findByLogin(data.login()) != null) return ResponseEntity.badRequest().build();
