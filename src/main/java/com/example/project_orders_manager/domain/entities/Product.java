@@ -1,4 +1,4 @@
-package com.example.project_orders_manager.domain;
+package com.example.project_orders_manager.domain.entities;
 
 import com.example.project_orders_manager.exceptions.BadRequestException;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -29,15 +29,28 @@ public class Product implements Serializable {
     private Integer quantity = 0;
     @Column(precision = 10, scale = 2)
     private BigDecimal price = BigDecimal.valueOf(0.00);
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
-    public void reduceStock(Integer quantity){
-        if (this.quantity< quantity) throw new BadRequestException("Insufficient stock for the product: SKU " + this.SKU);
+
+    public void reduceStock(Integer quantity) {
+        if (this.quantity < quantity)
+            throw new BadRequestException("Insufficient stock for the product: SKU " + this.SKU);
         this.quantity -= quantity;
     }
 
-    public void incrementStock(Integer quantity){
-        if (quantity < 0) throw new BadRequestException("Cannot increment stock with a negative value: SKU " + this.SKU);
+    public void incrementStock(Integer quantity) {
+        if (quantity == null || quantity <= 0)
+            throw new BadRequestException("Quantity to increment must be greater than zero: SKU " + this.SKU);
         this.quantity += quantity;
     }
 
+    public void setSKU(String SKU) {
+        this.SKU = SKU.toUpperCase();
+    }
+
+    public void setName(String name) {
+        this.name = name.toUpperCase();
+    }
 }

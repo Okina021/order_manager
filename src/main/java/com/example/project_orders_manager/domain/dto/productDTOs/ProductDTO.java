@@ -1,6 +1,7 @@
 package com.example.project_orders_manager.domain.dto.productDTOs;
 
-import com.example.project_orders_manager.domain.Product;
+import com.example.project_orders_manager.domain.entities.Product;
+import com.example.project_orders_manager.domain.dto.categoryDTOs.CategorySummaryDTO;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -10,7 +11,8 @@ public record ProductDTO(
         String SKU,
         String name,
         Integer qty,
-        BigDecimal price
+        BigDecimal price,
+        CategorySummaryDTO category
 ) {
     public static ProductDTO fromEntity(Product product) {
         return new ProductDTO(
@@ -18,7 +20,9 @@ public record ProductDTO(
                 product.getSKU(),
                 product.getName(),
                 product.getQuantity(),
-                product.getPrice());
+                product.getPrice(),
+                CategorySummaryDTO.fromEntity(product.getCategory())
+        );
     }
 
     public static Product toEntity(ProductDTO productDTO) {
@@ -42,3 +46,6 @@ public record ProductDTO(
         return product;
     }
 }
+
+
+
