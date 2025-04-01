@@ -29,24 +29,24 @@ public class CategoryService {
     }
 
     public CategoryDTO findByCategory(String category) {
-        return CategoryDTO.fromEntity(repository.findByCategory(category.toUpperCase()).orElseThrow(()-> new EntityNotFoundException("Category not found")));
+        return CategoryDTO.fromEntity(repository.findByCategory(category.toUpperCase()).orElseThrow(() -> new EntityNotFoundException("Category not found")));
     }
 
     @Transactional
-    public CategoryDTO save(CategoryDTO categoryDTO){
+    public CategoryDTO save(CategoryDTO categoryDTO) {
         Category category = CategoryDTO.toEntity(categoryDTO);
         category.setCategory(category.getCategory().toUpperCase());
         return CategoryDTO.fromEntity(repository.save(category));
     }
 
     @Transactional
-    public CategoryDTO update(UUID id, CategoryDTO categoryDTO){
-        Category category = repository.findById(id).orElseThrow(()->new EntityNotFoundException("Category not found"));
+    public CategoryDTO update(UUID id, CategoryDTO categoryDTO) {
+        Category category = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Category not found"));
         Optional.ofNullable(categoryDTO.category()).ifPresent(category::setCategory);
         return CategoryDTO.fromEntity(repository.save(category));
     }
 
-    public void deleteCategory(UUID id){
+    public void deleteCategory(UUID id) {
         if (!repository.existsById(id)) throw new EntityNotFoundException("Category not found");
         repository.deleteById(id);
     }

@@ -34,6 +34,11 @@ public class CustomerController {
         return ResponseEntity.ok(service.getCustomerById(id));
     }
 
+    @GetMapping(params = "doc")
+    public ResponseEntity<CustomerDTO> getCustomerByDoc(@RequestParam String doc) {
+        return ResponseEntity.ok(service.getCustomerByDoc(doc));
+    }
+
     @Operation(summary = "Atualizar cliente", description = "Atualiza os dados de um cliente com base no ID informado")
     @PutMapping("/{id}")
     public ResponseEntity<CustomerDTO> putCustomer(@PathVariable UUID id, @RequestBody CustomerDTO customerDTO) {

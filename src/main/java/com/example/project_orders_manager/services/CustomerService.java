@@ -30,6 +30,10 @@ public class CustomerService {
         return customerRepository.findById(id).map(CustomerDTO::fromEntity).orElseThrow(() -> new EntityNotFoundException("Customer not found"));
     }
 
+    public CustomerDTO getCustomerByDoc(String doc) {
+        return CustomerDTO.fromEntity(customerRepository.findByDoc(doc).orElseThrow(() -> new EntityNotFoundException("Doc not found")));
+    }
+
     @Transactional
     public CustomerDTO save(CustomerDTO customer) {
         if (customer.id() != null) throw new BadRequestException("Customer id must be null");

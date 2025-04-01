@@ -14,13 +14,13 @@ public enum OrderStatus {
         this.code = code;
     }
 
-    public int getCode(){
+    public int getCode() {
         return this.code;
     }
 
-    public static OrderStatus fromCode(int code){
-        for (OrderStatus status : OrderStatus.values()){
-            if (status.getCode()==code){
+    public static OrderStatus fromCode(int code) {
+        for (OrderStatus status : OrderStatus.values()) {
+            if (status.getCode() == code) {
                 return status;
             }
         }

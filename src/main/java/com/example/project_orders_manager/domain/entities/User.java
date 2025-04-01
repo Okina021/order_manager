@@ -38,13 +38,13 @@ public class User implements UserDetails, Serializable {
     private UserRole role;
 
     public User(String login, String password, UserRole role) {
-                this.login = login;
-                this.password = password;
-                this.role = role;
-                this.active = true;
+        this.login = login;
+        this.password = password;
+        this.role = role;
+        this.active = true;
     }
 
-    public User(String login, String password ){
+    public User(String login, String password) {
         this.login = login;
         this.password = password;
         this.active = true;

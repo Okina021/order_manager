@@ -9,6 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, UUID> {
-//    @Query("SELECT p FROM Product p WHERE p.category.id = :categoryId")
     Optional<Category> findByCategory(String category);
 }

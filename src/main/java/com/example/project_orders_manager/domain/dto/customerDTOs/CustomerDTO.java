@@ -26,7 +26,7 @@ public record CustomerDTO(
                 customer.getSurname(),
                 customer.getDoc(),
                 customer.getEmail(),
-                customer.getBillingAddress() != null ?  BillingAddressDTO.fromEntity(customer.getBillingAddress()) :null,
+                customer.getBillingAddress() != null ? BillingAddressDTO.fromEntity(customer.getBillingAddress()) : null,
                 customer.getShippingAddresses() != null ?  customer.getShippingAddresses().stream().map(AddressDTO::fromEntity).toList() : null,
                 customer.getOrders() != null ?  customer.getOrders().stream().map(OrderSummaryDTO::fromEntity).toList() : null
         );

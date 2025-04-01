@@ -8,10 +8,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RestController
@@ -24,8 +26,11 @@ public class OrderController {
 
     @Operation(summary = "Listar pedidos", description = "Retorna uma lista paginada com todos os pedidos cadastrados")
     @GetMapping
-    public ResponseEntity<Page<OrderSummaryDTO>> getOrders(Pageable pageable) {
-        return ResponseEntity.ok(service.getAllOrders(pageable));
+    public ResponseEntity<Page<OrderSummaryDTO>> getOrders(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateFrom,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateTo,
+            Pageable pageable) {
+        return ResponseEntity.ok(service.getAllOrders(dateFrom, dateTo, pageable));
     }
 
     @Operation(summary = "Buscar pedido por ID", description = "Retorna os detalhes de um pedido cadastrado pelo ID informado")

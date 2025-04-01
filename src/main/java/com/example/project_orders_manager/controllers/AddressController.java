@@ -1,7 +1,6 @@
 package com.example.project_orders_manager.controllers;
 
 import com.example.project_orders_manager.domain.dto.addressDTOs.AddressDTO;
-import com.example.project_orders_manager.domain.dto.customerDTOs.CustomerDTO;
 import com.example.project_orders_manager.services.AddressService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +26,7 @@ public class AddressController {
     public ResponseEntity<AddressDTO> getAddressById(@PathVariable UUID id){
         return ResponseEntity.ok(service.getAddressById(id));
     }
+
     @Operation(summary = "Cadastrar novo Endereço", description = "Cria um novo Endereço e retorna os dados cadastrados")
     @PostMapping
     public ResponseEntity<AddressDTO> postCustomer(@RequestBody AddressDTO addressDTO) {

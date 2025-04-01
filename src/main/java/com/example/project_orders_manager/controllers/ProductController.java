@@ -34,6 +34,11 @@ public class ProductController {
         return ResponseEntity.ok(service.getProduct(id));
     }
 
+    @GetMapping(params = "SKU")
+    public ResponseEntity<ProductDTO> getProductBySKU(@RequestParam String SKU) {
+        return ResponseEntity.ok(service.getProductbySKU(SKU));
+    }
+
     @Operation(summary = "Cadastrar novo produto", description = "Cria um novo produto e retorna os dados cadastrados")
     @PostMapping
     public ResponseEntity<ProductDTO> postProduct(@RequestBody ProductDTO productDTO) {

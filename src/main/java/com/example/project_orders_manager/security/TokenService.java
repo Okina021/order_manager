@@ -22,7 +22,7 @@ public class TokenService {
     }
 
     public String validateToken(String token) {
-       try {
+        try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.require(algorithm)
                     .withIssuer("orders-manager-api")
@@ -30,8 +30,8 @@ public class TokenService {
                     .verify(token)
                     .getSubject();
         } catch (JWTVerificationException e) {
-           throw new RuntimeException("");
-       }
+            throw new RuntimeException("");
+        }
     }
 
     public String generateToken(User user) {

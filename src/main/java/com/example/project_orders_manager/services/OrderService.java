@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -31,8 +32,14 @@ public class OrderService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public Page<OrderSummaryDTO> getAllOrders(Pageable pageable) {
-        return repository.findAll(pageable).map(OrderSummaryDTO::fromEntity);
+    public Page<OrderSummaryDTO> getAllOrders(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+        if (dateTo == null) {
+            dateTo = LocalDateTime.now();
+        }
+        if (dateFrom == null) {
+            return repository.findByDateBefore(dateTo, pageable).map(OrderSummaryDTO::fromEntity);
+        }
+        return repository.findByDateBetween(dateFrom, dateTo, pageable).map(OrderSummaryDTO::fromEntity);
     }
 
     public OrderDTO getOrder(UUID id) {

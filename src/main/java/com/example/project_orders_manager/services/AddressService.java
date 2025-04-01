@@ -21,26 +21,26 @@ public class AddressService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public Page<AddressDTO> listAddresses(Pageable pageable){
+    public Page<AddressDTO> listAddresses(Pageable pageable) {
         return repository.findAll(pageable).map(AddressDTO::fromEntity);
     }
 
-    public AddressDTO getAddressById(UUID id){
-        return AddressDTO.fromEntity(repository.findById(id).orElseThrow(()-> new EntityNotFoundException("Address not found")));
+    public AddressDTO getAddressById(UUID id) {
+        return AddressDTO.fromEntity(repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Address not found")));
     }
 
-    public AddressDTO save(AddressDTO addressDTO){
+    public AddressDTO save(AddressDTO addressDTO) {
         AddressDTO toSave = AddressDTO.fromEntity(repository.save(AddressDTO.toEntity(addressDTO)));
-        if (addressDTO.principal_address() && addressDTO.customer_id() != null){
+        if (addressDTO.principal_address() && addressDTO.customer_id() != null) {
             Customer customer = customerRepository.findById(addressDTO.customer_id()).orElseThrow(() -> new EntityNotFoundException("Customer not found"));
-            customer.setBillingAddress(repository.findById(toSave.id()).orElseThrow(()-> new EntityNotFoundException("Address not found")));
+            customer.setBillingAddress(repository.findById(toSave.id()).orElseThrow(() -> new EntityNotFoundException("Address not found")));
             customerRepository.save(customer);
         }
         return toSave;
     }
 
-    public AddressDTO update(UUID id,AddressDTO addressDTO){
-        Address toSave = repository.findById(id).orElseThrow(()-> new EntityNotFoundException("Address not found id: " + id));
+    public AddressDTO update(UUID id, AddressDTO addressDTO) {
+        Address toSave = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Address not found id: " + id));
         Optional.ofNullable(addressDTO.street()).ifPresent(toSave::setStreet);
         Optional.ofNullable(addressDTO.number()).ifPresent(toSave::setNumber);
         Optional.ofNullable(addressDTO.complement()).ifPresent(toSave::setComplement);
@@ -52,8 +52,14 @@ public class AddressService {
         return AddressDTO.fromEntity(repository.save(toSave));
     }
 
-    public void delete(UUID id){
-        repository.findById(id).orElseThrow(()->new EntityNotFoundException("Address not found by id: "+ id));
+    public void delete(UUID id) {
+        Address address = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Address not found by id: " + id));
+        if (address.getPrincipalAddress()) {
+            Customer customer = customerRepository.findById(address.getCustomer().getId()).orElseThrow(() -> new EntityNotFoundException("Customer not found"));
+            customer.setBillingAddress(null);
+            customerRepository.save(customer);
+            System.err.println("Billing address of customer_id: " + address.getCustomer().getId() + " was been excluded");
+        }
         repository.deleteById(id);
     }
 

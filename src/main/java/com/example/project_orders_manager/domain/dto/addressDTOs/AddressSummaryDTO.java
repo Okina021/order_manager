@@ -11,8 +11,8 @@ public record AddressSummaryDTO(
         Boolean principal,
         UUID customer_id
 ) {
-    public static AddressSummaryDTO fromEntity(Address address){
-        return  new AddressSummaryDTO(
+    public static AddressSummaryDTO fromEntity(Address address) {
+        return new AddressSummaryDTO(
                 address.getId(),
                 address.getPostalCode(),
                 address.getNumber(),

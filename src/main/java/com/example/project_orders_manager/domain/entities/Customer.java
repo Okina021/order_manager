@@ -37,12 +37,11 @@ public class Customer implements Serializable {
     @OneToOne
     @JoinColumn(name = "billing_address_id")
     private Address billingAddress;
-    @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> shippingAddresses;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
-
 
 
     public void setName(String name) {

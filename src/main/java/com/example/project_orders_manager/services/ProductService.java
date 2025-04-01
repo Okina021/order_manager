@@ -30,6 +30,10 @@ public class ProductService {
         return repository.findById(id).map((ProductDTO::fromEntity)).orElseThrow(() -> new EntityNotFoundException("Product with id " + id + " not foud"));
     }
 
+    public ProductDTO getProductbySKU(String SKU) {
+        return ProductDTO.fromEntity(repository.findBySKU(SKU).orElseThrow(() -> new EntityNotFoundException("SKU not found")));
+    }
+
     @Transactional
     public ProductDTO postProduct(ProductDTO productDTO) {
         if (productDTO.id() != null) throw new BadRequestException("Product id must be null");
