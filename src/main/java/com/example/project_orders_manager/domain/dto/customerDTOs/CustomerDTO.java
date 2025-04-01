@@ -1,8 +1,10 @@
 package com.example.project_orders_manager.domain.dto.customerDTOs;
 
+import com.example.project_orders_manager.domain.dto.addressDTOs.AddressDTO;
+import com.example.project_orders_manager.domain.dto.addressDTOs.BillingAddressDTO;
+import com.example.project_orders_manager.domain.dto.orderDTOs.OrderSummaryDTO;
 import com.example.project_orders_manager.domain.entities.Customer;
 import com.example.project_orders_manager.domain.entities.Order;
-import com.example.project_orders_manager.domain.dto.orderDTOs.OrderSummaryDTO;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,6 +15,8 @@ public record CustomerDTO(
         String surname,
         String doc,
         String email,
+        BillingAddressDTO billing_address,
+        List<AddressDTO> shipping_addresses,
         List<OrderSummaryDTO> orders) {
 
     public static CustomerDTO fromEntity(Customer customer) {
@@ -22,7 +26,9 @@ public record CustomerDTO(
                 customer.getSurname(),
                 customer.getDoc(),
                 customer.getEmail(),
-                customer.getOrders().stream().map(OrderSummaryDTO::fromEntity).toList()
+                customer.getBillingAddress() != null ?  BillingAddressDTO.fromEntity(customer.getBillingAddress()) :null,
+                customer.getShippingAddresses() != null ?  customer.getShippingAddresses().stream().map(AddressDTO::fromEntity).toList() : null,
+                customer.getOrders() != null ?  customer.getOrders().stream().map(OrderSummaryDTO::fromEntity).toList() : null
         );
     }
 
@@ -32,6 +38,15 @@ public record CustomerDTO(
         customer.setSurname(customerDTO.surname().toUpperCase());
         customer.setDoc(String.valueOf(customerDTO.doc()));
         customer.setEmail(customerDTO.email().toLowerCase());
+        if(customerDTO.billing_address()!= null) {
+            customer.setBillingAddress(BillingAddressDTO.toEntity(customerDTO.billing_address()));
+        }
+        if (customerDTO.shipping_addresses() != null) {
+            customer.setShippingAddresses(
+                    customerDTO.shipping_addresses().stream().map(AddressDTO::toEntity
+                    ).toList()
+            );
+        }
         if (customerDTO.orders() != null) {
             customer.setOrders(
                     customerDTO.orders.stream().map(orderDTO -> {
@@ -49,10 +64,19 @@ public record CustomerDTO(
     public static Customer toEntityWithId(CustomerDTO customerDTO) {
         Customer customer = new Customer();
         customer.setId(customerDTO.id());
-        customer.setName(customerDTO.name());
-        customer.setSurname(customerDTO.surname());
-        customer.setDoc(customerDTO.doc());
-        customer.setEmail(customerDTO.email());
+        customer.setName(customerDTO.name().toUpperCase());
+        customer.setSurname(customerDTO.surname().toUpperCase());
+        customer.setDoc(String.valueOf(customerDTO.doc()));
+        customer.setEmail(customerDTO.email().toLowerCase());
+        if(customerDTO.billing_address()!= null) {
+            customer.setBillingAddress(BillingAddressDTO.toEntity(customerDTO.billing_address()));
+        }
+        if (customerDTO.shipping_addresses() != null) {
+            customer.setShippingAddresses(
+                    customerDTO.shipping_addresses().stream().map(AddressDTO::toEntity
+                    ).toList()
+            );
+        }
         if (customerDTO.orders() != null) {
             customer.setOrders(
                     customerDTO.orders.stream().map(orderDTO -> {

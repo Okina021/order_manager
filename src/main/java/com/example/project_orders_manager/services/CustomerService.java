@@ -1,8 +1,9 @@
 package com.example.project_orders_manager.services;
 
-import com.example.project_orders_manager.domain.entities.Customer;
+import com.example.project_orders_manager.domain.dto.addressDTOs.BillingAddressDTO;
 import com.example.project_orders_manager.domain.dto.customerDTOs.CustomerDTO;
 import com.example.project_orders_manager.domain.dto.customerDTOs.CustomerSummaryDTO;
+import com.example.project_orders_manager.domain.entities.Customer;
 import com.example.project_orders_manager.exceptions.BadRequestException;
 import com.example.project_orders_manager.repositories.CustomerRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -42,9 +43,13 @@ public class CustomerService {
         Optional.ofNullable(customer.name()).ifPresent(c::setName);
         Optional.ofNullable(customer.surname()).ifPresent(c::setSurname);
         Optional.ofNullable(customer.doc()).ifPresent(c::setDoc);
-        return CustomerDTO.fromEntity(customerRepository.save(CustomerDTO.toEntity(customer)));
-
+        if (customer.billing_address() != null) {
+            c.setBillingAddress(BillingAddressDTO.toEntity(customer.billing_address()));
+        }
+        customerRepository.save(c);
+        return CustomerDTO.fromEntity(c);
     }
+
 
     public void deleteCustomer(UUID id) {
         if (!customerRepository.existsById(id)) throw new EntityNotFoundException("Customer not found");

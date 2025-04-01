@@ -8,6 +8,7 @@ import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -32,9 +33,17 @@ public class Customer implements Serializable {
     private String doc;
     @Column(unique = true, nullable = false)
     private String email;
+    private LocalDateTime registrationDate = LocalDateTime.now();
+    @OneToOne
+    @JoinColumn(name = "billing_address_id")
+    private Address billingAddress;
+    @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Address> shippingAddresses;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
+
+
 
     public void setName(String name) {
         this.name = name.toUpperCase();
