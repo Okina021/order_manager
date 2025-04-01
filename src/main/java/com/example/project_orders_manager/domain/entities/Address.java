@@ -56,7 +56,10 @@ public class Address {
     @Pattern(regexp = "\\d{8}", message = "Postal code must contain only numbers and be 8 digits long")
     private String postalCode;
 
+    @Column(name = "principal_address")
+    private Boolean principalAddress = false;
+
     @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = true)
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 }

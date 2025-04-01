@@ -2,7 +2,9 @@ package com.example.project_orders_manager.services;
 
 import com.example.project_orders_manager.domain.dto.addressDTOs.AddressDTO;
 import com.example.project_orders_manager.domain.entities.Address;
+import com.example.project_orders_manager.domain.entities.Customer;
 import com.example.project_orders_manager.repositories.AddressRepository;
+import com.example.project_orders_manager.repositories.CustomerRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +18,8 @@ import java.util.UUID;
 public class AddressService {
     @Autowired
     private AddressRepository repository;
+    @Autowired
+    private CustomerRepository customerRepository;
 
     public Page<AddressDTO> listAddresses(Pageable pageable){
         return repository.findAll(pageable).map(AddressDTO::fromEntity);
@@ -26,7 +30,13 @@ public class AddressService {
     }
 
     public AddressDTO save(AddressDTO addressDTO){
-        return AddressDTO.fromEntity(repository.save(AddressDTO.toEntity(addressDTO)));
+        AddressDTO toSave = AddressDTO.fromEntity(repository.save(AddressDTO.toEntity(addressDTO)));
+        if (addressDTO.principal_address() && addressDTO.customer_id() != null){
+            Customer customer = customerRepository.findById(addressDTO.customer_id()).orElseThrow(() -> new EntityNotFoundException("Customer not found"));
+            customer.setBillingAddress(repository.findById(toSave.id()).orElseThrow(()-> new EntityNotFoundException("Address not found")));
+            customerRepository.save(customer);
+        }
+        return toSave;
     }
 
     public AddressDTO update(UUID id,AddressDTO addressDTO){

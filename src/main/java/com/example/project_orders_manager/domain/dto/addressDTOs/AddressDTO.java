@@ -15,6 +15,7 @@ public record AddressDTO(
         String state,
         String country,
         String postal_code,
+        Boolean principal_address,
         UUID customer_id
 ) {
     public static AddressDTO fromEntity(Address address){
@@ -28,6 +29,7 @@ public record AddressDTO(
                 address.getState(),
                 address.getCountry(),
                 address.getPostalCode(),
+                address.getPrincipalAddress(),
                 address.getCustomer() != null ? address.getCustomer().getId(): null
         );
     }
@@ -43,6 +45,7 @@ public record AddressDTO(
         address.setState(addressDTO.state());
         address.setCountry(addressDTO.country());
         address.setPostalCode(addressDTO.postal_code());
+        address.setPrincipalAddress(addressDTO.principal_address());
         if( addressDTO.customer_id != null) {
             Customer customer = new Customer();
             customer.setId(addressDTO.customer_id());
