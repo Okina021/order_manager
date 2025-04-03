@@ -30,7 +30,7 @@ public record AddressDTO(
                 address.getCountry(),
                 address.getPostalCode(),
                 address.getPrincipalAddress(),
-                address.getCustomer() != null ? address.getCustomer().getId() : null
+                address.getCustomer().getId()
         );
     }
 
@@ -46,11 +46,9 @@ public record AddressDTO(
         address.setCountry(addressDTO.country());
         address.setPostalCode(addressDTO.postal_code());
         address.setPrincipalAddress(addressDTO.principal_address());
-        if (addressDTO.customer_id != null) {
-            Customer customer = new Customer();
-            customer.setId(addressDTO.customer_id());
-            address.setCustomer(customer);
-        }
+        Customer customer = new Customer();
+        customer.setId(addressDTO.customer_id());
+        address.setCustomer(customer);
         return address;
     }
 }

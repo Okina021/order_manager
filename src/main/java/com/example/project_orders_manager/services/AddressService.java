@@ -31,7 +31,7 @@ public class AddressService {
 
     public AddressDTO save(AddressDTO addressDTO) {
         AddressDTO toSave = AddressDTO.fromEntity(repository.save(AddressDTO.toEntity(addressDTO)));
-        if (addressDTO.principal_address() && addressDTO.customer_id() != null) {
+        if (addressDTO.principal_address()) {
             Customer customer = customerRepository.findById(addressDTO.customer_id()).orElseThrow(() -> new EntityNotFoundException("Customer not found"));
             customer.setBillingAddress(repository.findById(toSave.id()).orElseThrow(() -> new EntityNotFoundException("Address not found")));
             customerRepository.save(customer);
