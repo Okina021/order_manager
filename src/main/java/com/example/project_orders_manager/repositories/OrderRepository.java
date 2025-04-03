@@ -1,6 +1,7 @@
 package com.example.project_orders_manager.repositories;
 
 import com.example.project_orders_manager.domain.entities.Order;
+import com.example.project_orders_manager.domain.enums.OrderStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +19,6 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
 
     @Query("SELECT o FROM Order o WHERE o.createdAt <= :dateTo")
     Page<Order> findByDateBefore(@Param("dateTo") LocalDateTime dateTo, Pageable pageable);
+
+    Page<Order> findByStatus(OrderStatus status, Pageable pageable);
 }

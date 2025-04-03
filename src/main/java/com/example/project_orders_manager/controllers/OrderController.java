@@ -39,6 +39,11 @@ public class OrderController {
         return ResponseEntity.ok(service.getOrder(id));
     }
 
+    @GetMapping(params = "status")
+    public ResponseEntity<Page<OrderSummaryDTO>> getByStatus(@RequestParam String status, Pageable pageable){
+        return ResponseEntity.ok(service.getOrderByStatus(status, pageable));
+    }
+
     @Operation(summary = "Cadastrar novo pedido", description = "Cria um novo pedido e retorna os dados cadastrados")
     @PostMapping
     public ResponseEntity<OrderDTO> postOrder(@RequestBody OrderDTO order) {

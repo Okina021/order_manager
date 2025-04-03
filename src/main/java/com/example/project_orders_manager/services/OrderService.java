@@ -46,6 +46,10 @@ public class OrderService {
         return repository.findById(id).map(OrderDTO::fromEntity).orElseThrow(() -> new EntityNotFoundException("Order id " + id + " not found"));
     }
 
+    public Page<OrderSummaryDTO> getOrderByStatus(String status ,Pageable pageable){
+        return repository.findByStatus(OrderStatus.valueOf(status), pageable).map(OrderSummaryDTO::fromEntity);
+    }
+
     @Transactional
     public OrderDTO postOrder(OrderDTO order) {
         if (order.id() != null) throw new BadRequestException("New order cannot have an ID.");
