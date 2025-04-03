@@ -1,7 +1,7 @@
 package com.example.project_orders_manager.domain.dto.productDTOs;
 
-import com.example.project_orders_manager.domain.entities.Product;
 import com.example.project_orders_manager.domain.dto.categoryDTOs.CategorySummaryDTO;
+import com.example.project_orders_manager.domain.entities.Product;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -31,6 +31,7 @@ public record ProductDTO(
         product.setName(productDTO.name().toUpperCase());
         product.setQuantity(productDTO.qty());
         product.setPrice(productDTO.price());
+        product.setCategory(CategorySummaryDTO.toEntity(productDTO.category()));
 
         return product;
     }

@@ -4,6 +4,7 @@ import com.example.project_orders_manager.domain.entities.Product;
 import com.example.project_orders_manager.domain.dto.productDTOs.ProductDTO;
 import com.example.project_orders_manager.domain.dto.productDTOs.ProductSummaryDTO;
 import com.example.project_orders_manager.exceptions.BadRequestException;
+import com.example.project_orders_manager.repositories.CategoryRepository;
 import com.example.project_orders_manager.repositories.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class ProductService {
 
     @Autowired
     private ProductRepository repository;
+    @Autowired
+    private CategoryRepository categoryRepository;
+
 
     public Page<ProductSummaryDTO> getProducts(Pageable pageable) {
         return repository.findAll(pageable)
@@ -37,7 +41,10 @@ public class ProductService {
     @Transactional
     public ProductDTO postProduct(ProductDTO productDTO) {
         if (productDTO.id() != null) throw new BadRequestException("Product id must be null");
-        return ProductDTO.fromEntity(repository.save(ProductDTO.toEntity(productDTO)));
+        Product product = ProductDTO.toEntity(productDTO);
+        product.setCategory(categoryRepository.findById(productDTO.category().id()).orElseThrow());
+        product = repository.save(product);
+        return ProductDTO.fromEntity(product);
     }
 
     @Transactional

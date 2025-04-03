@@ -22,6 +22,8 @@ public class Category implements Serializable {
     private List<Product> products = new ArrayList<>();
 
     public void setCategory(String category) {
-        this.category = category.toUpperCase();
+        if (category != null) {
+            this.category = category.toUpperCase();
+        }
     }
 }
