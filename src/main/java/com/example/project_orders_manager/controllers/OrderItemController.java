@@ -24,7 +24,7 @@ public class OrderItemController {
 
     @Operation(summary = "Listar itens de pedido", description = "Retorna uma lista paginada com todos os itens de pedido cadastrados")
     @GetMapping
-    public ResponseEntity<Page<OrderItemSummaryDTO>> getOrderItems(Pageable pageable) {
+    public ResponseEntity<Page<OrderItemDTO>> getOrderItems(Pageable pageable) {
         return ResponseEntity.ok(service.getOrderItems(pageable));
     }
 

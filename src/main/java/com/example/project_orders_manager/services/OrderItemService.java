@@ -26,8 +26,8 @@ public class OrderItemService {
     @Autowired
     private OrderRepository orderRepository;
 
-    public Page<OrderItemSummaryDTO> getOrderItems(Pageable pageable) {
-        return repository.findAll(pageable).map(OrderItemSummaryDTO::fromEntity);
+    public Page<OrderItemDTO> getOrderItems(Pageable pageable) {
+        return repository.findAll(pageable).map(OrderItemDTO::fromEntity);
     }
 
     public OrderItemDTO getOrderItemById(UUID id) {
