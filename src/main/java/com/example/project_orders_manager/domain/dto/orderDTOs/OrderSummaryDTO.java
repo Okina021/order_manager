@@ -20,6 +20,7 @@ public record OrderSummaryDTO(
                 order.getId(),
                 order.getCustomer().getId(),
                 order.getStatus(),
-                LocalDateTime.ofInstant(order.getCreatedAt(), ZoneId.systemDefault()));
+                order.getCreatedAt()
+        );
     }
 }

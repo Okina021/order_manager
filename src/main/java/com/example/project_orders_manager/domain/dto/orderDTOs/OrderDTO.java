@@ -26,7 +26,7 @@ public record OrderDTO(
                 order.getId(),
                 order.getCustomer().getId(),
                 order.getStatus(),
-                LocalDateTime.ofInstant(order.getCreatedAt(), ZoneId.systemDefault()),
+                order.getCreatedAt(),
                 order.getItems() != null ? order.getItems().stream().map(OrderItemSummaryDTO::fromEntity).toList() : Collections.emptyList()
         );
     }
@@ -37,7 +37,7 @@ public record OrderDTO(
         order.setStatus(orderDTO.status());
         Customer customer = new Customer();
         customer.setId(orderDTO.customer_id());
-        order.setCreatedAt(orderDTO.created_at.toInstant(ZoneOffset.UTC));
+        order.setCreatedAt(orderDTO.created_at());
         return order;
     }
 
