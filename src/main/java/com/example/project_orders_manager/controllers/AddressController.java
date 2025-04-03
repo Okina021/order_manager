@@ -1,6 +1,7 @@
 package com.example.project_orders_manager.controllers;
 
 import com.example.project_orders_manager.domain.dto.addressDTOs.AddressDTO;
+import com.example.project_orders_manager.domain.dto.addressDTOs.AddressSummaryDTO;
 import com.example.project_orders_manager.services.AddressService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class AddressController {
     private AddressService service;
 
     @GetMapping
-    public ResponseEntity<Page<AddressDTO>> getAddresses(Pageable pageable){
+    public ResponseEntity<Page<AddressSummaryDTO>> getAddresses(Pageable pageable){
         return ResponseEntity.ok(service.listAddresses(pageable));
     }
     @GetMapping("/{id}")

@@ -1,6 +1,7 @@
 package com.example.project_orders_manager.services;
 
 import com.example.project_orders_manager.domain.dto.addressDTOs.AddressDTO;
+import com.example.project_orders_manager.domain.dto.addressDTOs.AddressSummaryDTO;
 import com.example.project_orders_manager.domain.entities.Address;
 import com.example.project_orders_manager.domain.entities.Customer;
 import com.example.project_orders_manager.repositories.AddressRepository;
@@ -21,8 +22,8 @@ public class AddressService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public Page<AddressDTO> listAddresses(Pageable pageable) {
-        return repository.findAll(pageable).map(AddressDTO::fromEntity);
+    public Page<AddressSummaryDTO> listAddresses(Pageable pageable) {
+        return repository.findAll(pageable).map(AddressSummaryDTO::fromEntity);
     }
 
     public AddressDTO getAddressById(UUID id) {
