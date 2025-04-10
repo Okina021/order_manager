@@ -5,12 +5,18 @@ import com.example.project_orders_manager.domain.dto.addressDTOs.BillingAddressD
 import com.example.project_orders_manager.domain.dto.orderDTOs.OrderSummaryDTO;
 import com.example.project_orders_manager.domain.entities.Customer;
 import com.example.project_orders_manager.domain.entities.Order;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 public record CustomerDTO(
         UUID id,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+        LocalDateTime created_at,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+        LocalDateTime updated_at,
         String name,
         String surname,
         String doc,
@@ -22,6 +28,8 @@ public record CustomerDTO(
     public static CustomerDTO fromEntity(Customer customer) {
         return new CustomerDTO(
                 customer.getId(),
+                customer.getCreatedAt(),
+                customer.getUpdatedAt(),
                 customer.getName(),
                 customer.getSurname(),
                 customer.getDoc(),

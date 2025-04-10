@@ -2,11 +2,17 @@ package com.example.project_orders_manager.domain.dto.addressDTOs;
 
 import com.example.project_orders_manager.domain.entities.Address;
 import com.example.project_orders_manager.domain.entities.Customer;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record AddressDTO(
         UUID id,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+        LocalDateTime created_at,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+        LocalDateTime updated_at,
         String street,
         String number,
         String complement,
@@ -21,6 +27,8 @@ public record AddressDTO(
     public static AddressDTO fromEntity(Address address) {
         return new AddressDTO(
                 address.getId(),
+                address.getCreatedAt(),
+                address.getUpdatedAt(),
                 address.getStreet(),
                 address.getNumber(),
                 address.getComplement(),
@@ -37,6 +45,8 @@ public record AddressDTO(
     public static Address toEntity(AddressDTO addressDTO) {
         Address address = new Address();
         address.setId(addressDTO.id());
+        address.setCreatedAt(addressDTO.created_at());
+        address.setUpdatedAt(addressDTO.updated_at());
         address.setStreet(addressDTO.street());
         address.setNumber(addressDTO.number());
         address.setComplement(addressDTO.complement());

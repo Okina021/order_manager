@@ -15,18 +15,22 @@ import java.util.UUID;
 
 public record OrderDTO(
         UUID id,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+        LocalDateTime created_at,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+        LocalDateTime updated_at,
         UUID customer_id,
         OrderStatus status,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime created_at,
         List<OrderItemSummaryDTO> items
 ) {
     public static OrderDTO fromEntity(Order order) {
         return new OrderDTO(
                 order.getId(),
+                order.getCreatedAt(),
+                order.getUpdatedAt(),
                 order.getCustomer().getId(),
                 order.getStatus(),
-                order.getCreatedAt(),
                 order.getItems() != null ? order.getItems().stream().map(OrderItemSummaryDTO::fromEntity).toList() : Collections.emptyList()
         );
     }
