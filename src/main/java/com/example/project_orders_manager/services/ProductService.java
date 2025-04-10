@@ -42,7 +42,8 @@ public class ProductService {
     public ProductDTO postProduct(ProductDTO productDTO) {
         if (productDTO.id() != null) throw new BadRequestException("Product id must be null");
         Product product = ProductDTO.toEntity(productDTO);
-        product.setCategory(categoryRepository.findById(productDTO.category().id()).orElseThrow());
+        product.setCategory(categoryRepository.findById(productDTO.category().id())
+                .orElseThrow(() -> new EntityNotFoundException("Category with id " + productDTO.category().id() + " not found")));;
         product = repository.save(product);
         return ProductDTO.fromEntity(product);
     }

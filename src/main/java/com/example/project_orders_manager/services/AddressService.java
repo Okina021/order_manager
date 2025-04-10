@@ -50,6 +50,12 @@ public class AddressService {
         Optional.ofNullable(addressDTO.state()).ifPresent(toSave::setState);
         Optional.ofNullable(addressDTO.country()).ifPresent(toSave::setCountry);
         Optional.ofNullable(addressDTO.postal_code()).ifPresent(toSave::setPostalCode);
+        Optional.ofNullable(addressDTO.principal_address()).ifPresent(toSave::setPrincipalAddress);
+        if (toSave.getPrincipalAddress()) {
+            Customer customer = customerRepository.findById(toSave.getCustomer().getId()).orElseThrow(() -> new EntityNotFoundException("Customer not found"));
+            customer.setBillingAddress(repository.findById(toSave.getId()).orElseThrow(() -> new EntityNotFoundException("Address not found")));
+            customerRepository.save(customer);
+        }
         return AddressDTO.fromEntity(repository.save(toSave));
     }
 
