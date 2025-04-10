@@ -22,7 +22,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User implements UserDetails, Serializable {
+public class User extends BaseEntity implements UserDetails, Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     @Id

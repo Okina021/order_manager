@@ -17,7 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OrderItem implements Serializable {
+public class OrderItem extends BaseEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     @Id

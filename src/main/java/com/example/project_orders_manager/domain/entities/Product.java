@@ -15,7 +15,7 @@ import java.util.UUID;
 @Table(name = "products")
 @Data
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Product implements Serializable {
+public class Product extends BaseEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     @Id

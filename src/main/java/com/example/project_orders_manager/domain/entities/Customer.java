@@ -18,10 +18,9 @@ import java.util.UUID;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Customer implements Serializable {
+public class Customer extends BaseEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
