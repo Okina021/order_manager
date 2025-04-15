@@ -1,5 +1,6 @@
 package com.example.project_orders_manager.controllers;
 
+import com.example.project_orders_manager.domain.dto.orderItemDTOs.OrderItemSummaryDTO;
 import com.example.project_orders_manager.domain.dto.productDTOs.ProductDTO;
 import com.example.project_orders_manager.domain.dto.productDTOs.ProductSummaryDTO;
 import com.example.project_orders_manager.services.ProductService;
@@ -13,10 +14,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RestController
@@ -27,12 +30,19 @@ public class ProductController {
     @Autowired
     private ProductService service;
 
-    @Operation(summary = "Listar produtos", description = "Retorna uma lista paginada com todos os produtos cadastrados")
-    @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
+    @Operation(summary = "Listar endereços", description = "Retorna uma lista paginada com todos os endereços cadastrados. É possível filtrar por data inicial e final.")
+    @ApiResponse(responseCode = "200", description = "Lista de endereços retornada com sucesso")
     @GetMapping
-    public ResponseEntity<Page<ProductSummaryDTO>> getProducts(
-            @Parameter(hidden = true) Pageable pageable) {
-        return ResponseEntity.ok(service.getProducts(pageable));
+    public ResponseEntity<Page<ProductSummaryDTO>> listOrders(
+            @Parameter(description = "Data inicial para filtro (yyyy-MM-dd)")
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateFrom,
+
+            @Parameter(description = "Data final para filtro (yyyy-MM-dd)")
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateTo,
+
+            @Parameter(hidden = true)
+            Pageable pageable) {
+        return ResponseEntity.ok(service.listProducts(dateFrom, dateTo, pageable));
     }
 
     @Operation(summary = "Buscar produto por ID", description = "Retorna os detalhes de um produto cadastrado pelo ID informado")

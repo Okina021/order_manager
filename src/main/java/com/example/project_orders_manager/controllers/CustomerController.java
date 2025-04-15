@@ -1,5 +1,6 @@
 package com.example.project_orders_manager.controllers;
 
+import com.example.project_orders_manager.domain.dto.addressDTOs.AddressSummaryDTO;
 import com.example.project_orders_manager.domain.dto.customerDTOs.CustomerDTO;
 import com.example.project_orders_manager.domain.dto.customerDTOs.CustomerSummaryDTO;
 import com.example.project_orders_manager.services.CustomerService;
@@ -14,10 +15,12 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RestController
@@ -28,11 +31,19 @@ public class CustomerController {
     @Autowired
     private CustomerService service;
 
-    @Operation(summary = "Listar todos os clientes", description = "Retorna uma lista paginada com todos os clientes cadastrados")
-    @ApiResponse(responseCode = "200", description = "Clientes listados com sucesso")
+    @Operation(summary = "Listar endereços", description = "Retorna uma lista paginada com todos os endereços cadastrados. É possível filtrar por data inicial e final.")
+    @ApiResponse(responseCode = "200", description = "Lista de endereços retornada com sucesso")
     @GetMapping
-    public ResponseEntity<Page<CustomerSummaryDTO>> listCustomers(Pageable pageable) {
-        return ResponseEntity.ok(service.getAllCustomers(pageable));
+    public ResponseEntity<Page<CustomerSummaryDTO>> listOrders(
+            @Parameter(description = "Data inicial para filtro (yyyy-MM-dd)")
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateFrom,
+
+            @Parameter(description = "Data final para filtro (yyyy-MM-dd)")
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateTo,
+
+            @Parameter(hidden = true)
+            Pageable pageable) {
+        return ResponseEntity.ok(service.listCustomers(dateFrom, dateTo, pageable));
     }
 
     @Operation(summary = "Buscar cliente por ID", description = "Retorna os detalhes de um cliente cadastrado pelo ID informado")

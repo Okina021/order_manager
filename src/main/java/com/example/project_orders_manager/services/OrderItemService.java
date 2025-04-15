@@ -1,5 +1,6 @@
 package com.example.project_orders_manager.services;
 
+import com.example.project_orders_manager.domain.dto.addressDTOs.AddressSummaryDTO;
 import com.example.project_orders_manager.domain.entities.OrderItem;
 import com.example.project_orders_manager.domain.entities.Product;
 import com.example.project_orders_manager.domain.dto.orderItemDTOs.OrderItemDTO;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -26,8 +28,14 @@ public class OrderItemService {
     @Autowired
     private OrderRepository orderRepository;
 
-    public Page<OrderItemDTO> getOrderItems(Pageable pageable) {
-        return repository.findAll(pageable).map(OrderItemDTO::fromEntity);
+    public Page<OrderItemSummaryDTO> listOrderItems(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+        if (dateTo == null) {
+            dateTo = LocalDateTime.now();
+        }
+        if (dateFrom == null) {
+            return repository.findByDateBefore(dateTo, pageable).map(OrderItemSummaryDTO::fromEntity);
+        }
+        return repository.findByDateBetween(dateFrom, dateTo, pageable).map(OrderItemSummaryDTO::fromEntity);
     }
 
     public OrderItemDTO getOrderItemById(UUID id) {

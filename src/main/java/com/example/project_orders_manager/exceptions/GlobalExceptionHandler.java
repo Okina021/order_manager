@@ -3,6 +3,8 @@ package com.example.project_orders_manager.exceptions;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -28,6 +30,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleAll(Exception ex, WebRequest request) {
         return buildResponse("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(InternalAuthenticationServiceException.class)
+    public ResponseEntity<Object> handleInternalAuthenticationService(InternalAuthenticationServiceException ex, WebRequest request){
+        return buildResponse("Login or password incorret", HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Object> handleBadCredentials(InternalAuthenticationServiceException ex, WebRequest request){
+        return buildResponse("Login or password incorret", HttpStatus.UNAUTHORIZED);
     }
 
     private ResponseEntity<Object> buildResponse(String message, HttpStatus status) {

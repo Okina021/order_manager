@@ -14,10 +14,12 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RestController
@@ -28,11 +30,19 @@ public class CategoryController {
     @Autowired
     private CategoryService service;
 
-    @Operation(summary = "Listar categorias", description = "Retorna uma lista paginada com todas as categorias cadastradas.")
-    @ApiResponse(responseCode = "200", description = "Categorias listadas com sucesso")
+    @Operation(summary = "Listar categorias", description = "Retorna uma lista paginada com todos os categorias cadastrados. É possível filtrar por data inicial e final.")
+    @ApiResponse(responseCode = "200", description = "Lista de categorias retornada com sucesso")
     @GetMapping
-    public ResponseEntity<Page<CategorySummaryDTO>> listCategories(Pageable pageable) {
-        return ResponseEntity.ok(service.findCategories(pageable));
+    public ResponseEntity<Page<CategorySummaryDTO>> listOrders(
+            @Parameter(description = "Data inicial para filtro (yyyy-MM-dd)")
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateFrom,
+
+            @Parameter(description = "Data final para filtro (yyyy-MM-dd)")
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateTo,
+
+            @Parameter(hidden = true)
+            Pageable pageable) {
+        return ResponseEntity.ok(service.listCategories(dateFrom, dateTo, pageable));
     }
 
     @Operation(summary = "Buscar categoria por ID", description = "Retorna os detalhes de uma categoria pelo seu ID.")

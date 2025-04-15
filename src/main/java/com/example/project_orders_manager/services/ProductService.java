@@ -1,5 +1,6 @@
 package com.example.project_orders_manager.services;
 
+import com.example.project_orders_manager.domain.dto.addressDTOs.AddressSummaryDTO;
 import com.example.project_orders_manager.domain.entities.Product;
 import com.example.project_orders_manager.domain.dto.productDTOs.ProductDTO;
 import com.example.project_orders_manager.domain.dto.productDTOs.ProductSummaryDTO;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,9 +27,14 @@ public class ProductService {
     private CategoryRepository categoryRepository;
 
 
-    public Page<ProductSummaryDTO> getProducts(Pageable pageable) {
-        return repository.findAll(pageable)
-                .map(ProductSummaryDTO::fromEntity);
+    public Page<ProductSummaryDTO> listProducts(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+        if (dateTo == null) {
+            dateTo = LocalDateTime.now();
+        }
+        if (dateFrom == null) {
+            return repository.findByDateBefore(dateTo, pageable).map(ProductSummaryDTO::fromEntity);
+        }
+        return repository.findByDateBetween(dateFrom, dateTo, pageable).map(ProductSummaryDTO::fromEntity);
     }
 
     public ProductDTO getProduct(UUID id) {
@@ -42,8 +49,8 @@ public class ProductService {
     public ProductDTO postProduct(ProductDTO productDTO) {
         if (productDTO.id() != null) throw new BadRequestException("Product id must be null");
         Product product = ProductDTO.toEntity(productDTO);
-        product.setCategory(categoryRepository.findById(productDTO.category().id())
-                .orElseThrow(() -> new EntityNotFoundException("Category with id " + productDTO.category().id() + " not found")));;
+        product.setCategory(categoryRepository.findByCategory(productDTO.category())
+                .orElseThrow(() -> new EntityNotFoundException("Category '" + productDTO.category() + "' not found")));;
         product = repository.save(product);
         return ProductDTO.fromEntity(product);
     }

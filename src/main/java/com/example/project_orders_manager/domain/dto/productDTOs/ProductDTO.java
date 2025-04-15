@@ -1,6 +1,7 @@
 package com.example.project_orders_manager.domain.dto.productDTOs;
 
 import com.example.project_orders_manager.domain.dto.categoryDTOs.CategorySummaryDTO;
+import com.example.project_orders_manager.domain.entities.Category;
 import com.example.project_orders_manager.domain.entities.Product;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -18,7 +19,7 @@ public record ProductDTO(
         String name,
         Integer qty,
         BigDecimal price,
-        CategorySummaryDTO category
+        String category
 ) {
     public static ProductDTO fromEntity(Product product) {
         return new ProductDTO(
@@ -29,7 +30,7 @@ public record ProductDTO(
                 product.getName(),
                 product.getQuantity(),
                 product.getPrice(),
-                CategorySummaryDTO.fromEntity(product.getCategory())
+                product.getCategory().getCategory()
         );
     }
 
@@ -39,7 +40,9 @@ public record ProductDTO(
         product.setName(productDTO.name().toUpperCase());
         product.setQuantity(productDTO.qty());
         product.setPrice(productDTO.price());
-        product.setCategory(CategorySummaryDTO.toEntity(productDTO.category()));
+        Category category1 = new Category();
+        category1.setCategory(productDTO.category());
+        product.setCategory(category1);
 
         return product;
     }

@@ -67,6 +67,7 @@ public class OrderService {
     @Transactional
     public OrderDTO changeOrderStatus(UUID id, Integer status) {
         Order order = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Order id " + id + " not found"));
+        if (order.getStatus() == OrderStatus.CANCELED) throw new BadRequestException("Canceled orders cannot have their status changed.");
         order.setStatus(OrderStatus.fromCode(status));
         if (order.getStatus() == OrderStatus.CANCELED) {
             for (OrderItem item : order.getItems()) {

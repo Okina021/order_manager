@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,8 +23,14 @@ public class AddressService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public Page<AddressSummaryDTO> listAddresses(Pageable pageable) {
-        return repository.findAll(pageable).map(AddressSummaryDTO::fromEntity);
+    public Page<AddressSummaryDTO> listAddress(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+        if (dateTo == null) {
+            dateTo = LocalDateTime.now();
+        }
+        if (dateFrom == null) {
+            return repository.findByDateBefore(dateTo, pageable).map(AddressSummaryDTO::fromEntity);
+        }
+        return repository.findByDateBetween(dateFrom, dateTo, pageable).map(AddressSummaryDTO::fromEntity);
     }
 
     public AddressDTO getAddressById(UUID id) {

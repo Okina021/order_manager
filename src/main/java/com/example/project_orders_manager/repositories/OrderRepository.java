@@ -14,10 +14,10 @@ import java.util.UUID;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, UUID> {
-    @Query("SELECT o FROM Order o WHERE o.createdAt BETWEEN :dateFrom AND :dateTo")
+    @Query("SELECT o FROM Order o WHERE o.updatedAt BETWEEN :dateFrom AND :dateTo")
     Page<Order> findByDateBetween(@Param("dateFrom") LocalDateTime dateFrom, @Param("dateTo") LocalDateTime dateTo, Pageable pageable);
 
-    @Query("SELECT o FROM Order o WHERE o.createdAt <= :dateTo")
+    @Query("SELECT o FROM Order o WHERE o.updatedAt <= :dateTo")
     Page<Order> findByDateBefore(@Param("dateTo") LocalDateTime dateTo, Pageable pageable);
 
     Page<Order> findByStatus(OrderStatus status, Pageable pageable);

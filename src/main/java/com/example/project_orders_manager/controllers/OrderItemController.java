@@ -1,6 +1,8 @@
 package com.example.project_orders_manager.controllers;
 
+import com.example.project_orders_manager.domain.dto.addressDTOs.AddressSummaryDTO;
 import com.example.project_orders_manager.domain.dto.orderItemDTOs.OrderItemDTO;
+import com.example.project_orders_manager.domain.dto.orderItemDTOs.OrderItemSummaryDTO;
 import com.example.project_orders_manager.services.OrderItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,9 +15,11 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RestController
@@ -26,12 +30,19 @@ public class OrderItemController {
     @Autowired
     private OrderItemService service;
 
-    @Operation(summary = "Listar itens de pedido", description = "Retorna uma lista paginada com todos os itens de pedido cadastrados")
-    @ApiResponse(responseCode = "200", description = "Lista de itens de pedido retornada com sucesso")
+    @Operation(summary = "Listar endereços", description = "Retorna uma lista paginada com todos os endereços cadastrados. É possível filtrar por data inicial e final.")
+    @ApiResponse(responseCode = "200", description = "Lista de endereços retornada com sucesso")
     @GetMapping
-    public ResponseEntity<Page<OrderItemDTO>> getOrderItems(
-            @Parameter(hidden = true) Pageable pageable) {
-        return ResponseEntity.ok(service.getOrderItems(pageable));
+    public ResponseEntity<Page<OrderItemSummaryDTO>> listOrders(
+            @Parameter(description = "Data inicial para filtro (yyyy-MM-dd)")
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateFrom,
+
+            @Parameter(description = "Data final para filtro (yyyy-MM-dd)")
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateTo,
+
+            @Parameter(hidden = true)
+            Pageable pageable) {
+        return ResponseEntity.ok(service.listOrderItems(dateFrom, dateTo, pageable));
     }
 
     @Operation(summary = "Buscar item de pedido por ID", description = "Retorna os detalhes de um item de pedido pelo UUID informado")

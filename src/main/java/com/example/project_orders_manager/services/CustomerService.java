@@ -1,5 +1,6 @@
 package com.example.project_orders_manager.services;
 
+import com.example.project_orders_manager.domain.dto.addressDTOs.AddressSummaryDTO;
 import com.example.project_orders_manager.domain.dto.addressDTOs.BillingAddressDTO;
 import com.example.project_orders_manager.domain.dto.customerDTOs.CustomerDTO;
 import com.example.project_orders_manager.domain.dto.customerDTOs.CustomerSummaryDTO;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,9 +23,14 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public Page<CustomerSummaryDTO> getAllCustomers(Pageable pageable) {
-        return customerRepository.findAll(pageable)
-                .map(CustomerSummaryDTO::fromEntity);
+    public Page<CustomerSummaryDTO> listCustomers(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
+        if (dateTo == null) {
+            dateTo = LocalDateTime.now();
+        }
+        if (dateFrom == null) {
+            return customerRepository.findByDateBefore(dateTo, pageable).map(CustomerSummaryDTO::fromEntity);
+        }
+        return customerRepository.findByDateBetween(dateFrom, dateTo, pageable).map(CustomerSummaryDTO::fromEntity);
     }
 
     public CustomerDTO getCustomerById(UUID id) {

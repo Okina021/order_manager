@@ -2,6 +2,7 @@ package com.example.project_orders_manager.controllers;
 
 import com.example.project_orders_manager.domain.dto.addressDTOs.AddressDTO;
 import com.example.project_orders_manager.domain.dto.addressDTOs.AddressSummaryDTO;
+import com.example.project_orders_manager.domain.dto.orderDTOs.OrderSummaryDTO;
 import com.example.project_orders_manager.services.AddressService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,10 +14,12 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RestController
@@ -26,11 +29,19 @@ public class AddressController {
     @Autowired
     private AddressService service;
 
-    @Operation(summary = "Listar endereços", description = "Retorna uma lista paginada de endereços")
+    @Operation(summary = "Listar endereços", description = "Retorna uma lista paginada com todos os endereços cadastrados. É possível filtrar por data inicial e final.")
     @ApiResponse(responseCode = "200", description = "Lista de endereços retornada com sucesso")
     @GetMapping
-    public ResponseEntity<Page<AddressSummaryDTO>> listAddresses(Pageable pageable) {
-        return ResponseEntity.ok(service.listAddresses(pageable));
+    public ResponseEntity<Page<AddressSummaryDTO>> listOrders(
+            @Parameter(description = "Data inicial para filtro (yyyy-MM-dd)")
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateFrom,
+
+            @Parameter(description = "Data final para filtro (yyyy-MM-dd)")
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateTo,
+
+            @Parameter(hidden = true)
+            Pageable pageable) {
+        return ResponseEntity.ok(service.listAddress(dateFrom, dateTo, pageable));
     }
 
     @Operation(summary = "Buscar endereço por ID", description = "Retorna os detalhes de um endereço a partir do seu ID")
