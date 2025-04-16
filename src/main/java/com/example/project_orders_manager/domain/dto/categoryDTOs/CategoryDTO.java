@@ -11,9 +11,9 @@ import java.util.UUID;
 public record CategoryDTO(
         UUID id,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime created_at,
+        LocalDateTime createdAt,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime updated_at,
+        LocalDateTime updatedAt,
         String category,
         List<ProductSummaryDTO> products
 ) {
@@ -41,4 +41,3 @@ public record CategoryDTO(
         return category;
     }
 }
- 

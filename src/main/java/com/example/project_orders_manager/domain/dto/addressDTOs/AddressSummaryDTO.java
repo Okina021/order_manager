@@ -9,13 +9,13 @@ import java.util.UUID;
 public record AddressSummaryDTO(
         UUID id,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime created_at,
+        LocalDateTime createdAt,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime updated_at,
-        String postal_code,
+        LocalDateTime updatedAt,
+        String postalCode,
         String number,
-        Boolean principal,
-        UUID customer_id
+        Boolean principalAddress,
+        UUID customerId
 ) {
     public static AddressSummaryDTO fromEntity(Address address) {
         return new AddressSummaryDTO(

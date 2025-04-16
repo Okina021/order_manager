@@ -10,19 +10,20 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public record CustomerDTO(
         UUID id,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime created_at,
+        LocalDateTime createdAt,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime updated_at,
+        LocalDateTime updatedAt,
         String name,
         String surname,
         String doc,
         String email,
-        BillingAddressDTO billing_address,
-        List<AddressDTO> shipping_addresses,
+        BillingAddressDTO billingAddress,
+        List<AddressDTO> shippingAddresses,
         List<OrderSummaryDTO> orders) {
 
     public static CustomerDTO fromEntity(Customer customer) {
@@ -35,65 +36,38 @@ public record CustomerDTO(
                 customer.getDoc(),
                 customer.getEmail(),
                 customer.getBillingAddress() != null ? BillingAddressDTO.fromEntity(customer.getBillingAddress()) : null,
-                customer.getShippingAddresses() != null ?  customer.getShippingAddresses().stream().map(AddressDTO::fromEntity).toList() : null,
-                customer.getOrders() != null ?  customer.getOrders().stream().map(OrderSummaryDTO::fromEntity).toList() : null
+                customer.getShippingAddresses() != null ? customer.getShippingAddresses().stream().map(AddressDTO::fromEntity).collect(Collectors.toList()) : null,
+                customer.getOrders() != null ? customer.getOrders().stream().map(OrderSummaryDTO::fromEntity).collect(Collectors.toList()) : null
         );
     }
 
     public static Customer toEntity(CustomerDTO customerDTO) {
-        Customer customer = new Customer();
-        customer.setName(customerDTO.name().toUpperCase());
-        customer.setSurname(customerDTO.surname().toUpperCase());
-        customer.setDoc(String.valueOf(customerDTO.doc()));
-        customer.setEmail(customerDTO.email().toLowerCase());
-        if(customerDTO.billing_address()!= null) {
-            customer.setBillingAddress(BillingAddressDTO.toEntity(customerDTO.billing_address()));
-        }
-        if (customerDTO.shipping_addresses() != null) {
-            customer.setShippingAddresses(
-                    customerDTO.shipping_addresses().stream().map(AddressDTO::toEntity
-                    ).toList()
-            );
-        }
-        if (customerDTO.orders() != null) {
-            customer.setOrders(
-                    customerDTO.orders.stream().map(orderDTO -> {
-                        Order order = new Order();
-                        order.setId(orderDTO.id());
-                        order.setStatus(orderDTO.status());
-                        order.setCustomer(customer);
-                        return order;
-                    }).toList()
-            );
-        }
-        return customer;
-    }
-
-    public static Customer toEntityWithId(CustomerDTO customerDTO) {
         Customer customer = new Customer();
         customer.setId(customerDTO.id());
         customer.setName(customerDTO.name().toUpperCase());
         customer.setSurname(customerDTO.surname().toUpperCase());
         customer.setDoc(String.valueOf(customerDTO.doc()));
         customer.setEmail(customerDTO.email().toLowerCase());
-        if(customerDTO.billing_address()!= null) {
-            customer.setBillingAddress(BillingAddressDTO.toEntity(customerDTO.billing_address()));
+
+        if (customerDTO.billingAddress() != null) {
+            customer.setBillingAddress(BillingAddressDTO.toEntity(customerDTO.billingAddress()));
         }
-        if (customerDTO.shipping_addresses() != null) {
+
+        if (customerDTO.shippingAddresses() != null) {
             customer.setShippingAddresses(
-                    customerDTO.shipping_addresses().stream().map(AddressDTO::toEntity
-                    ).toList()
+                    customerDTO.shippingAddresses().stream().map(AddressDTO::toEntity).collect(Collectors.toList())
             );
         }
+
         if (customerDTO.orders() != null) {
             customer.setOrders(
-                    customerDTO.orders.stream().map(orderDTO -> {
+                    customerDTO.orders().stream().map(orderDTO -> {
                         Order order = new Order();
                         order.setId(orderDTO.id());
                         order.setStatus(orderDTO.status());
                         order.setCustomer(customer);
                         return order;
-                    }).toList()
+                    }).collect(Collectors.toList())
             );
         }
         return customer;

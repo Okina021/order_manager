@@ -12,14 +12,14 @@ import java.util.UUID;
 public record OrderItemDTO(
         UUID id,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime created_at,
+        LocalDateTime createdAt,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime updated_at,
-        UUID order_id,
-        UUID product_id,
+        LocalDateTime updatedAt,
+        UUID orderId,
+        UUID productId,
         Integer qty,
         BigDecimal price,
-        BigDecimal total_price
+        BigDecimal subtotal
 ) {
 
     public static OrderItemDTO fromEntity(OrderItem orderItem) {
@@ -31,32 +31,20 @@ public record OrderItemDTO(
                 orderItem.getProduct().getId(),
                 orderItem.getQuantity(),
                 orderItem.getPrice(),
-                orderItem.getTotalPrice()
+                orderItem.getSubtotal()
         );
-    }
-
-    public static OrderItem toEntityWithId(OrderItemDTO dto) {
-        OrderItem orderItem = new OrderItem();
-        orderItem.setId(dto.id());
-        Order order = new Order();
-        order.setId(dto.order_id());
-        Product product = new Product();
-        product.setId(dto.product_id());
-        orderItem.setQuantity(dto.qty());
-        orderItem.setPrice(dto.price());
-        orderItem.setTotalPrice(dto.total_price());
-        return orderItem;
     }
 
     public static OrderItem toEntity(OrderItemDTO dto) {
         OrderItem orderItem = new OrderItem();
+        orderItem.setId(dto.id());
         Order order = new Order();
-        order.setId(dto.order_id());
+        order.setId(dto.orderId());
         Product product = new Product();
-        product.setId(dto.product_id());
+        product.setId(dto.productId());
         orderItem.setQuantity(dto.qty());
         orderItem.setPrice(dto.price());
-        orderItem.setTotalPrice(dto.total_price());
+        orderItem.setSubtotal(dto.subtotal());
         return orderItem;
     }
 

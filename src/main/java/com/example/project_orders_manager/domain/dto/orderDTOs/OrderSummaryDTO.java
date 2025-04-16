@@ -4,25 +4,28 @@ import com.example.project_orders_manager.domain.entities.Order;
 import com.example.project_orders_manager.domain.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record OrderSummaryDTO(
         UUID id,
-        UUID customer_id,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+        LocalDateTime createdAt,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+        LocalDateTime updatedAt,
+        UUID customerId,
         OrderStatus status,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime created_at,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime updated_at
+        BigDecimal total
 ) {
     public static OrderSummaryDTO fromEntity(Order order) {
         return new OrderSummaryDTO(
                 order.getId(),
+                order.getCreatedAt(),
+                order.getUpdatedAt(),
                 order.getCustomer().getId(),
                 order.getStatus(),
-                order.getCreatedAt(),
-                order.getUpdatedAt()
+                order.getTotal()
         );
     }
 }

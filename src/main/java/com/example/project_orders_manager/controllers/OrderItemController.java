@@ -30,10 +30,10 @@ public class OrderItemController {
     @Autowired
     private OrderItemService service;
 
-    @Operation(summary = "Listar endereços", description = "Retorna uma lista paginada com todos os endereços cadastrados. É possível filtrar por data inicial e final.")
-    @ApiResponse(responseCode = "200", description = "Lista de endereços retornada com sucesso")
+    @Operation(summary = "Listar itens de pedido", description = "Retorna uma lista paginada com todos os itens de pedidos cadastrados. É possível filtrar por data inicial e final.")
+    @ApiResponse(responseCode = "200", description = "Lista de itens de pedido retornada com sucesso")
     @GetMapping
-    public ResponseEntity<Page<OrderItemSummaryDTO>> listOrders(
+    public ResponseEntity<Page<OrderItemSummaryDTO>> listOrderItems(
             @Parameter(description = "Data inicial para filtro (yyyy-MM-dd)")
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateFrom,
 

@@ -48,9 +48,9 @@ public class OrderItemService {
             throw new BadRequestException("Field id must be null");
         }
 
-        Product product = productRepository.findById(orderItemDTO.product_id()).orElseThrow(() -> new EntityNotFoundException("Product not found"));
+        Product product = productRepository.findById(orderItemDTO.productId()).orElseThrow(() -> new EntityNotFoundException("Product not found"));
 
-        orderRepository.findById(orderItemDTO.order_id()).orElseThrow(() -> new EntityNotFoundException("Order not found"));
+        orderRepository.findById(orderItemDTO.orderId()).orElseThrow(() -> new EntityNotFoundException("Order not found"));
 
         if (product.getQuantity() < orderItemDTO.qty())
             throw new BadRequestException("Insufficient stock for product sku:" + product.getSKU());
@@ -59,8 +59,8 @@ public class OrderItemService {
 
         OrderItem orderItem = new OrderItem();
 
-        orderItem.setProduct(productRepository.findById(orderItemDTO.product_id()).orElseThrow(() -> new EntityNotFoundException("Product not found")));
-        orderItem.setOrder(orderRepository.findById(orderItemDTO.order_id()).orElseThrow(() -> new EntityNotFoundException("Order not found")));
+        orderItem.setProduct(productRepository.findById(orderItemDTO.productId()).orElseThrow(() -> new EntityNotFoundException("Product not found")));
+        orderItem.setOrder(orderRepository.findById(orderItemDTO.orderId()).orElseThrow(() -> new EntityNotFoundException("Order not found")));
         orderItem.setQuantity(orderItemDTO.qty());
         orderItem.setPrice(orderItem.getProduct().getPrice());
         productRepository.save(product);
@@ -79,10 +79,10 @@ public class OrderItemService {
         Product oldProduct = orderItem.getProduct();
         oldProduct.incrementStock(orderItem.getQuantity());
 
-        Product newProduct = productRepository.findById(orderItemDTO.product_id())
+        Product newProduct = productRepository.findById(orderItemDTO.productId())
                 .orElseThrow(() -> new EntityNotFoundException("Product not found"));
 
-        orderRepository.findById(orderItemDTO.order_id())
+        orderRepository.findById(orderItemDTO.orderId())
                 .orElseThrow(() -> new EntityNotFoundException("Order not found"));
 
         newProduct.reduceStock(orderItemDTO.qty());

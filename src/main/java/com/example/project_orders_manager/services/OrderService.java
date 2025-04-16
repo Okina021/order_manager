@@ -52,9 +52,10 @@ public class OrderService {
 
     @Transactional
     public OrderDTO postOrder(OrderDTO order) {
+        System.out.println(order);
         if (order.id() != null) throw new BadRequestException("New order cannot have an ID.");
         Order o = new Order();
-        o.setCustomer(customerRepository.findById(order.customer_id()).orElseThrow(() -> new EntityNotFoundException("Customer not found")));
+        o.setCustomer(customerRepository.findById(order.customerId()).orElseThrow(() -> new EntityNotFoundException("Customer not found")));
         if (order.status() != null) o.setStatus(OrderStatus.PENDING);
         return OrderDTO.fromEntity(repository.save(o));
     }

@@ -39,8 +39,8 @@ public class AddressService {
 
     public AddressDTO save(AddressDTO addressDTO) {
         AddressDTO toSave = AddressDTO.fromEntity(repository.save(AddressDTO.toEntity(addressDTO)));
-        if (addressDTO.principal_address()) {
-            Customer customer = customerRepository.findById(addressDTO.customer_id()).orElseThrow(() -> new EntityNotFoundException("Customer not found"));
+        if (addressDTO.principalAddress()) {
+            Customer customer = customerRepository.findById(addressDTO.customerId()).orElseThrow(() -> new EntityNotFoundException("Customer not found"));
             customer.setBillingAddress(repository.findById(toSave.id()).orElseThrow(() -> new EntityNotFoundException("Address not found")));
             customerRepository.save(customer);
         }
@@ -56,8 +56,8 @@ public class AddressService {
         Optional.ofNullable(addressDTO.city()).ifPresent(toSave::setCity);
         Optional.ofNullable(addressDTO.state()).ifPresent(toSave::setState);
         Optional.ofNullable(addressDTO.country()).ifPresent(toSave::setCountry);
-        Optional.ofNullable(addressDTO.postal_code()).ifPresent(toSave::setPostalCode);
-        Optional.ofNullable(addressDTO.principal_address()).ifPresent(toSave::setPrincipalAddress);
+        Optional.ofNullable(addressDTO.postalCode()).ifPresent(toSave::setPostalCode);
+        Optional.ofNullable(addressDTO.principalAddress()).ifPresent(toSave::setPrincipalAddress);
         if (toSave.getPrincipalAddress()) {
             Customer customer = customerRepository.findById(toSave.getCustomer().getId()).orElseThrow(() -> new EntityNotFoundException("Customer not found"));
             customer.setBillingAddress(repository.findById(toSave.getId()).orElseThrow(() -> new EntityNotFoundException("Address not found")));

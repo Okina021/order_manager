@@ -40,13 +40,13 @@ public class OrderItem extends BaseEntity implements Serializable {
     private BigDecimal price;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal totalPrice;
+    private BigDecimal subtotal;
 
     @PrePersist
     @PreUpdate
-    private void calculateTotalPrice() {
+    private void calculateSubtotal() {
         if (price != null && quantity != null) {
-            this.totalPrice = price.multiply(BigDecimal.valueOf(quantity));
+            this.subtotal = price.multiply(BigDecimal.valueOf(quantity));
         }
     }
 

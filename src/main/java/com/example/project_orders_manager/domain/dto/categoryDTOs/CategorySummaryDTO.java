@@ -9,12 +9,17 @@ import java.util.UUID;
 public record CategorySummaryDTO(
         UUID id,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime created_at,
+        LocalDateTime createdAt,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime updated_at,
+        LocalDateTime updatedAt,
         String category
 ) {
     public static CategorySummaryDTO fromEntity(Category category) {
-        return new CategorySummaryDTO(category.getId(), category.getCreatedAt(), category.getUpdatedAt(), category.getCategory());
+        return new CategorySummaryDTO(
+                category.getId(),
+                category.getCreatedAt(),
+                category.getUpdatedAt(),
+                category.getCategory()
+        );
     }
 }

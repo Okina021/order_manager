@@ -9,15 +9,23 @@ import java.util.UUID;
 public record CustomerSummaryDTO(
         UUID id,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime created_at,
+        LocalDateTime createdAt,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime updated_at,
+        LocalDateTime updatedAt,
         String name,
         String surname,
         String doc,
         String email
 ) {
     public static CustomerSummaryDTO fromEntity(Customer customer) {
-        return new CustomerSummaryDTO(customer.getId(), customer.getCreatedAt(), customer.getUpdatedAt(), customer.getName(), customer.getSurname(), customer.getDoc(), customer.getEmail());
+        return new CustomerSummaryDTO(
+                customer.getId(),
+                customer.getCreatedAt(),
+                customer.getUpdatedAt(),
+                customer.getName(),
+                customer.getSurname(),
+                customer.getDoc(),
+                customer.getEmail()
+        );
     }
 }

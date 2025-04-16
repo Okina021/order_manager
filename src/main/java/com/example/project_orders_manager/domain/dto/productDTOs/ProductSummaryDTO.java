@@ -29,12 +29,4 @@ public record ProductSummaryDTO(
                 product.getPrice()
         );
     }
-
-    public static Product toEntityWithId(ProductSummaryDTO summaryDTO) {
-        Product product = new Product();
-        product.setId(summaryDTO.id());
-        product.setSKU(summaryDTO.SKU());
-        product.setName(summaryDTO.name());
-        return product;
-    }
 }

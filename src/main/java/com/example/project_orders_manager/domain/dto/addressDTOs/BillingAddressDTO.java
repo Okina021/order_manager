@@ -13,7 +13,8 @@ public record BillingAddressDTO(
         String city,
         String state,
         String country,
-        String postal_code) {
+        String postalCode) {
+
     public static BillingAddressDTO fromEntity(Address address) {
         return new BillingAddressDTO(
                 address.getId(),
@@ -38,7 +39,7 @@ public record BillingAddressDTO(
         address.setCity(addressDTO.city());
         address.setState(addressDTO.state());
         address.setCountry(addressDTO.country());
-        address.setPostalCode(addressDTO.postal_code());
+        address.setPostalCode(addressDTO.postalCode());
 
         return address;
     }

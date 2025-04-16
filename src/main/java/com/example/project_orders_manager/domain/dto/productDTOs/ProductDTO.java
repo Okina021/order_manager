@@ -12,9 +12,9 @@ import java.util.UUID;
 public record ProductDTO(
         UUID id,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime created_at,
+        LocalDateTime createdAt,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime updated_at,
+        LocalDateTime updatedAt,
         String SKU,
         String name,
         Integer qty,
@@ -36,6 +36,9 @@ public record ProductDTO(
 
     public static Product toEntity(ProductDTO productDTO) {
         Product product = new Product();
+        product.setId(productDTO.id());
+        product.setCreatedAt(productDTO.createdAt());
+        product.setUpdatedAt(productDTO.updatedAt());
         product.setSKU(productDTO.SKU().toUpperCase());
         product.setName(productDTO.name().toUpperCase());
         product.setQuantity(productDTO.qty());
@@ -47,16 +50,7 @@ public record ProductDTO(
         return product;
     }
 
-    public static Product toEntityWithId(ProductDTO productDTO) {
-        Product product = new Product();
-        product.setId(productDTO.id());
-        product.setSKU(productDTO.SKU());
-        product.setName(productDTO.name());
-        product.setQuantity(productDTO.qty());
-        product.setPrice(productDTO.price());
 
-        return product;
-    }
 }
 
 

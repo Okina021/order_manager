@@ -55,7 +55,7 @@ public class CustomerService {
         Optional.ofNullable(customer.surname()).ifPresent(c::setSurname);
         Optional.ofNullable(customer.doc()).ifPresent(c::setDoc);
         Optional.ofNullable(customer.email()).ifPresent(c::setEmail);
-        Optional.ofNullable(customer.billing_address())
+        Optional.ofNullable(customer.billingAddress())
                 .map(BillingAddressDTO::toEntity)
                 .ifPresent(c::setBillingAddress);
         customerRepository.save(c);

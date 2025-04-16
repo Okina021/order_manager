@@ -32,7 +32,6 @@ public class Customer extends BaseEntity implements Serializable {
     private String doc;
     @Column(unique = true, nullable = false)
     private String email;
-    private LocalDateTime registrationDate = LocalDateTime.now();
     @OneToOne
     @JoinColumn(name = "billing_address_id")
     private Address billingAddress;

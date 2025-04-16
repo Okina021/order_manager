@@ -10,13 +10,13 @@ import java.util.UUID;
 public record OrderItemSummaryDTO(
         UUID id,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime created_at,
+        LocalDateTime createdAt,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime updated_at,
-        UUID product_id,
+        LocalDateTime updatedAt,
+        UUID productId,
         Integer quantity,
         BigDecimal price,
-        BigDecimal total_price) {
+        BigDecimal subtotal) {
     public static OrderItemSummaryDTO fromEntity(OrderItem orderItem) {
         return new OrderItemSummaryDTO(
                 orderItem.getId(),
@@ -25,6 +25,6 @@ public record OrderItemSummaryDTO(
                 orderItem.getProduct().getId(),
                 orderItem.getQuantity(),
                 orderItem.getPrice(),
-                orderItem.getTotalPrice());
+                orderItem.getSubtotal());
     }
 }

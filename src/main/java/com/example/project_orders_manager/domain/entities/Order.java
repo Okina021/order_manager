@@ -8,6 +8,7 @@ import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -33,5 +34,21 @@ public class Order extends BaseEntity implements Serializable {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items;
 
+    private BigDecimal total = BigDecimal.ZERO;
+
+
+    public BigDecimal getTotal() {
+        if (items == null) return BigDecimal.ZERO;
+
+        return items.stream()
+                .map(OrderItem::getSubtotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    @PrePersist
+    @PreUpdate
+    public void updateTotal() {
+        this.total = getTotal();
+    }
 
 }

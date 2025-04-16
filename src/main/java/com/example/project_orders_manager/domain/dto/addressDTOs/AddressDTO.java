@@ -10,9 +10,9 @@ import java.util.UUID;
 public record AddressDTO(
         UUID id,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime created_at,
+        LocalDateTime createdAt,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime updated_at,
+        LocalDateTime updatedAt,
         String street,
         String number,
         String complement,
@@ -20,9 +20,9 @@ public record AddressDTO(
         String city,
         String state,
         String country,
-        String postal_code,
-        Boolean principal_address,
-        UUID customer_id
+        String postalCode,
+        Boolean principalAddress,
+        UUID customerId
 ) {
     public static AddressDTO fromEntity(Address address) {
         return new AddressDTO(
@@ -45,8 +45,8 @@ public record AddressDTO(
     public static Address toEntity(AddressDTO addressDTO) {
         Address address = new Address();
         address.setId(addressDTO.id());
-        address.setCreatedAt(addressDTO.created_at());
-        address.setUpdatedAt(addressDTO.updated_at());
+        address.setCreatedAt(addressDTO.createdAt());
+        address.setUpdatedAt(addressDTO.updatedAt());
         address.setStreet(addressDTO.street());
         address.setNumber(addressDTO.number());
         address.setComplement(addressDTO.complement());
@@ -54,11 +54,13 @@ public record AddressDTO(
         address.setCity(addressDTO.city());
         address.setState(addressDTO.state());
         address.setCountry(addressDTO.country());
-        address.setPostalCode(addressDTO.postal_code());
-        address.setPrincipalAddress(addressDTO.principal_address());
+        address.setPostalCode(addressDTO.postalCode());
+        address.setPrincipalAddress(addressDTO.principalAddress());
+
         Customer customer = new Customer();
-        customer.setId(addressDTO.customer_id());
+        customer.setId(addressDTO.customerId());
         address.setCustomer(customer);
+
         return address;
     }
 }

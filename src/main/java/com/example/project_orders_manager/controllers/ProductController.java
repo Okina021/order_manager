@@ -30,10 +30,10 @@ public class ProductController {
     @Autowired
     private ProductService service;
 
-    @Operation(summary = "Listar endereços", description = "Retorna uma lista paginada com todos os endereços cadastrados. É possível filtrar por data inicial e final.")
-    @ApiResponse(responseCode = "200", description = "Lista de endereços retornada com sucesso")
+    @Operation(summary = "Listar produtos", description = "Retorna uma lista paginada com todos os produtos cadastrados. É possível filtrar por data inicial e final.")
+    @ApiResponse(responseCode = "200", description = "Lista de produtos retornada com sucesso")
     @GetMapping
-    public ResponseEntity<Page<ProductSummaryDTO>> listOrders(
+    public ResponseEntity<Page<ProductSummaryDTO>> listProducts(
             @Parameter(description = "Data inicial para filtro (yyyy-MM-dd)")
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateFrom,
 
@@ -108,6 +108,8 @@ public class ProductController {
                     content = @Content(schema = @Schema(implementation = ProductDTO.class))),
             @ApiResponse(responseCode = "404", description = "Produto não encontrado")
     })
+
+    @ApiResponse(responseCode = "204", description = "Produto deletado com sucesso")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(
             @Parameter(description = "UUID do produto a ser deletado", required = true)
