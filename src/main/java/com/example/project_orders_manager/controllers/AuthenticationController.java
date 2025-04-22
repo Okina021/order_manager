@@ -4,6 +4,7 @@ import com.example.project_orders_manager.domain.dto.userDTOs.AuthenticationDTO;
 import com.example.project_orders_manager.domain.dto.userDTOs.LoginResponseDTO;
 import com.example.project_orders_manager.domain.dto.userDTOs.RegisterDTO;
 import com.example.project_orders_manager.domain.entities.User;
+import com.example.project_orders_manager.exceptions.BadRequestException;
 import com.example.project_orders_manager.repositories.UserRepository;
 import com.example.project_orders_manager.security.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,9 +46,7 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
-        System.out.println(usernamePassword);
         var auth = this.authenticationManager.authenticate(usernamePassword);
-        System.out.println(auth);
         var token = tokenService.generateToken((User) auth.getPrincipal());
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
@@ -59,8 +58,7 @@ public class AuthenticationController {
     })
     @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestBody @Valid RegisterDTO data) {
-        if (this.repository.findByLogin(data.login()) != null)
-            return ResponseEntity.badRequest().build();
+        if (this.repository.findByLogin(data.login()) != null) throw new BadRequestException("Esse usuário já existe");
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
         User newUser = new User(data.login(), encryptedPassword, data.role());

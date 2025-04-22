@@ -2,7 +2,6 @@ package com.example.project_orders_manager.controllers;
 
 import com.example.project_orders_manager.domain.dto.addressDTOs.AddressDTO;
 import com.example.project_orders_manager.domain.dto.addressDTOs.AddressSummaryDTO;
-import com.example.project_orders_manager.domain.dto.orderDTOs.OrderSummaryDTO;
 import com.example.project_orders_manager.services.AddressService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

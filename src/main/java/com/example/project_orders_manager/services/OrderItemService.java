@@ -39,7 +39,7 @@ public class OrderItemService {
     }
 
     public OrderItemDTO getOrderItemById(UUID id) {
-        return OrderItemDTO.fromEntity(repository.findById(id).orElseThrow());
+        return OrderItemDTO.fromEntity(repository.findById(id).orElseThrow(() -> new EntityNotFoundException("OrderItem not found")));
     }
 
     @Transactional

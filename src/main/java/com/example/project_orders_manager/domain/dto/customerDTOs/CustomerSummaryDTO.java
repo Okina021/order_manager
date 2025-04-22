@@ -15,6 +15,7 @@ public record CustomerSummaryDTO(
         String name,
         String surname,
         String doc,
+        String type,
         String email
 ) {
     public static CustomerSummaryDTO fromEntity(Customer customer) {
@@ -25,6 +26,7 @@ public record CustomerSummaryDTO(
                 customer.getName(),
                 customer.getSurname(),
                 customer.getDoc(),
+                customer.getType().getCode(),
                 customer.getEmail()
         );
     }

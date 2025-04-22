@@ -38,10 +38,14 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<Object> handleBadCredentials(InternalAuthenticationServiceException ex, WebRequest request){
-        return buildResponse("Login or password incorret", HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<Object> handleBadCredentials(BadCredentialsException ex, WebRequest request) {
+        return buildResponse("Login or password incorrect", HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, WebRequest request) {
+        return buildResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
     private ResponseEntity<Object> buildResponse(String message, HttpStatus status) {
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());

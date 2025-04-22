@@ -1,14 +1,15 @@
 package com.example.project_orders_manager.domain.entities;
 
+import com.example.project_orders_manager.domain.enums.CustomerType;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -28,11 +29,15 @@ public class Customer extends BaseEntity implements Serializable {
     private String name;
     @Column(nullable = false)
     private String surname;
-    @Column(length = 11, unique = true, nullable = false)
+    @Pattern(regexp = "\\d{11}|\\d{14}", message = "O documento deve conter 11 ou 14 dígitos numéricos")
+    @Column(length = 14, unique = true, nullable = false)
     private String doc;
+    @Column(name = "type")
+    @Enumerated(EnumType.STRING)
+    private CustomerType type;
     @Column(unique = true, nullable = false)
     private String email;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "billing_address_id")
     private Address billingAddress;
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)

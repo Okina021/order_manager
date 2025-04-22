@@ -5,6 +5,7 @@ import com.example.project_orders_manager.domain.dto.addressDTOs.BillingAddressD
 import com.example.project_orders_manager.domain.dto.orderDTOs.OrderSummaryDTO;
 import com.example.project_orders_manager.domain.entities.Customer;
 import com.example.project_orders_manager.domain.entities.Order;
+import com.example.project_orders_manager.domain.enums.CustomerType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
@@ -21,6 +22,7 @@ public record CustomerDTO(
         String name,
         String surname,
         String doc,
+        String type,
         String email,
         BillingAddressDTO billingAddress,
         List<AddressDTO> shippingAddresses,
@@ -34,6 +36,7 @@ public record CustomerDTO(
                 customer.getName(),
                 customer.getSurname(),
                 customer.getDoc(),
+                customer.getType().getCode(),
                 customer.getEmail(),
                 customer.getBillingAddress() != null ? BillingAddressDTO.fromEntity(customer.getBillingAddress()) : null,
                 customer.getShippingAddresses() != null ? customer.getShippingAddresses().stream().map(AddressDTO::fromEntity).collect(Collectors.toList()) : null,
@@ -47,6 +50,7 @@ public record CustomerDTO(
         customer.setName(customerDTO.name().toUpperCase());
         customer.setSurname(customerDTO.surname().toUpperCase());
         customer.setDoc(String.valueOf(customerDTO.doc()));
+        customer.setType(CustomerType.fromCode(customerDTO.type()));
         customer.setEmail(customerDTO.email().toLowerCase());
 
         if (customerDTO.billingAddress() != null) {
