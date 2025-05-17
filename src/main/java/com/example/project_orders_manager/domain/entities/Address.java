@@ -61,8 +61,4 @@ public class Address extends BaseEntity implements Serializable {
 
     @Column(name = "principal_address")
     private Boolean principalAddress = false;
-
-    @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
 }

@@ -20,9 +20,7 @@ public record AddressDTO(
         String city,
         String state,
         String country,
-        String postalCode,
-        Boolean principalAddress,
-        UUID customerId
+        String postalCode
 ) {
     public static AddressDTO fromEntity(Address address) {
         return new AddressDTO(
@@ -36,9 +34,7 @@ public record AddressDTO(
                 address.getCity(),
                 address.getState(),
                 address.getCountry(),
-                address.getPostalCode(),
-                address.getPrincipalAddress(),
-                address.getCustomer().getId()
+                address.getPostalCode()
         );
     }
 
@@ -55,12 +51,6 @@ public record AddressDTO(
         address.setState(addressDTO.state());
         address.setCountry(addressDTO.country());
         address.setPostalCode(addressDTO.postalCode());
-        address.setPrincipalAddress(addressDTO.principalAddress());
-
-        Customer customer = new Customer();
-        customer.setId(addressDTO.customerId());
-        address.setCustomer(customer);
-
         return address;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.project_orders_manager.services;
 
+import com.example.project_orders_manager.domain.dto.addressDTOs.AddressDTO;
 import com.example.project_orders_manager.domain.dto.addressDTOs.AddressSummaryDTO;
 import com.example.project_orders_manager.domain.dto.addressDTOs.BillingAddressDTO;
 import com.example.project_orders_manager.domain.dto.customerDTOs.CustomerDTO;
@@ -23,6 +24,9 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private AddressService addressService;
+
     public Page<CustomerSummaryDTO> listCustomers(LocalDateTime dateFrom, LocalDateTime dateTo, Pageable pageable) {
         if (dateTo == null) {
             dateTo = LocalDateTime.now();
@@ -33,6 +37,7 @@ public class CustomerService {
         return customerRepository.findByDateBetween(dateFrom, dateTo, pageable).map(CustomerSummaryDTO::fromEntity);
     }
 
+    @Transactional
     public CustomerDTO getCustomerById(UUID id) {
         return customerRepository.findById(id).map(CustomerDTO::fromEntity).orElseThrow(() -> new EntityNotFoundException("Customer not found"));
     }
@@ -44,7 +49,12 @@ public class CustomerService {
     @Transactional
     public CustomerDTO save(CustomerDTO customer) {
         if (customer.id() != null) throw new BadRequestException("Customer id must be null");
-        return CustomerDTO.fromEntity(customerRepository.save(CustomerDTO.toEntity(customer)));
+        Customer toSave = CustomerDTO.toEntity(customer);
+        if (customer.billingAddress() != null){
+            toSave.setBillingAddress(addressService.findById(customer.billingAddress().id()));
+        }
+        System.out.println(toSave);
+        return CustomerDTO.fromEntity(customerRepository.save(toSave));
 
     }
 

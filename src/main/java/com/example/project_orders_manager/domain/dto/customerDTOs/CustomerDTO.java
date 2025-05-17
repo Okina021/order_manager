@@ -47,11 +47,11 @@ public record CustomerDTO(
     public static Customer toEntity(CustomerDTO customerDTO) {
         Customer customer = new Customer();
         customer.setId(customerDTO.id());
-        customer.setName(customerDTO.name().toUpperCase());
-        customer.setSurname(customerDTO.surname().toUpperCase());
+        customer.setName(customerDTO.name());
+        customer.setSurname(customerDTO.surname());
         customer.setDoc(String.valueOf(customerDTO.doc()));
         customer.setType(CustomerType.fromCode(customerDTO.type()));
-        customer.setEmail(customerDTO.email().toLowerCase());
+        customer.setEmail(customerDTO.email());
 
         if (customerDTO.billingAddress() != null) {
             customer.setBillingAddress(BillingAddressDTO.toEntity(customerDTO.billingAddress()));

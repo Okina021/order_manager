@@ -13,9 +13,7 @@ public record AddressSummaryDTO(
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime updatedAt,
         String postalCode,
-        String number,
-        Boolean principalAddress,
-        UUID customerId
+        String number
 ) {
     public static AddressSummaryDTO fromEntity(Address address) {
         return new AddressSummaryDTO(
@@ -23,9 +21,7 @@ public record AddressSummaryDTO(
                 address.getCreatedAt(),
                 address.getUpdatedAt(),
                 address.getPostalCode(),
-                address.getNumber(),
-                address.getPrincipalAddress(),
-                address.getCustomer().getId()
+                address.getNumber()
         );
     }
 }

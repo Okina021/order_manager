@@ -31,7 +31,7 @@ public class AddressController {
     @Operation(summary = "Listar endereços", description = "Retorna uma lista paginada com todos os endereços cadastrados. É possível filtrar por data inicial e final.")
     @ApiResponse(responseCode = "200", description = "Lista de endereços retornada com sucesso")
     @GetMapping
-    public ResponseEntity<Page<AddressSummaryDTO>> listOrders(
+    public ResponseEntity<Page<AddressDTO>> listOrders(
             @Parameter(description = "Data inicial para filtro (yyyy-MM-dd)")
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime dateFrom,
 

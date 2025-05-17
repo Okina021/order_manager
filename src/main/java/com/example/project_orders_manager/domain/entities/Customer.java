@@ -40,7 +40,13 @@ public class Customer extends BaseEntity implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "billing_address_id")
     private Address billingAddress;
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinTable(
+            name = "customer_addresses",
+            joinColumns = @JoinColumn(name = "customer_id"),
+            inverseJoinColumns = @JoinColumn(name = "address_id")
+    )
     private List<Address> shippingAddresses;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -48,14 +54,14 @@ public class Customer extends BaseEntity implements Serializable {
 
 
     public void setName(String name) {
-        this.name = name.toUpperCase();
+        if (name != null) this.name = name.toUpperCase();
     }
 
     public void setSurname(String surname) {
-        this.surname = surname.toUpperCase();
+        if (surname != null) this.surname = surname.toUpperCase();
     }
 
     public void setEmail(String email) {
-        this.email = email.toLowerCase();
+        if (email != null) this.email = email.toLowerCase();
     }
 }

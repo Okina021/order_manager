@@ -20,5 +20,6 @@ public interface CustomerRepository extends JpaRepository<Customer, UUID> {
 
     @Query("SELECT o FROM Customer o WHERE o.updatedAt <= :dateTo")
     Page<Customer> findByDateBefore(@Param("dateTo") LocalDateTime dateTo, Pageable pageable);
+
     Optional<Customer> findByDoc(String doc);
 }
